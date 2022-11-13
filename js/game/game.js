@@ -136,6 +136,13 @@ Game.loadResources = function() {
         mesh: null
     };
 
+    var jet2 = {
+        path: "assets/jet/",
+        obj: "jetski.obj",
+        mtl: "jetski.mtl",
+        mesh: null
+    };
+
     var platform = {
         path: "assets/Nieve/",
         obj: "plataforma_2.obj",
