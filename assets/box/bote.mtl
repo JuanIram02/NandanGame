@@ -1,0 +1,10 @@
+newmtl boat:Material_002
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd Textura.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks specular.jpg
+Ns 96.08
