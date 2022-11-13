@@ -133,7 +133,7 @@ Game.loadResources = function() {
     };
 
     var platform = {
-        path: "assets/Nieve/",
+        path: "assets/Nieve/plataforma/",
         obj: "plataforma_2.obj",
         mtl: "plataforma_2.mtl",
         mesh: null

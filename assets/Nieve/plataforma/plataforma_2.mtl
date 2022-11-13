@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 10.11.2022 22:53:16
+# File Created: 13.11.2022 14:21:34
 
-newmtl plataforma_2_initialShadingGroup
+newmtl plataforma_2_plataforma_2_initialShadingGroup
 	Ns 30.0000
 	Ni 1.5000
 	d 1.0000
