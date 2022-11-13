@@ -55,6 +55,10 @@ Game.onResourcesLoaded = function() {
     this.jet.position.set(0, 12, 4);
     this.scene.add(this.jet);
 
+    this.muñeco.scale.set(2, 2, 2);
+    this.muñeco.rotation.y = Math.PI;
+    this.muñeco.position.set(0, 0, 20);
+    this.scene.add(this.muñeco);
    
     this.sphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
@@ -133,9 +137,16 @@ Game.loadResources = function() {
     };
 
     var platform = {
-        path: "assets/Nieve/plataforma/",
+        path: "assets/Nieve/",
         obj: "plataforma_2.obj",
         mtl: "plataforma_2.mtl",
+        mesh: null
+    }
+
+    var muñeco = {
+        path: "assets/Nieve/mono de nieve/",
+        obj: "snowman.obj",
+        mtl: "snowman.mtl",
         mesh: null
     }
 
@@ -177,6 +188,17 @@ Game.loadResources = function() {
             }
         });
         Game.platformFlying = object;
+    });
+
+    loadOBJWithMTL(muñeco.path, muñeco.obj, muñeco.mtl, (object) => {
+        object.scale.set(0.2, 0.2, 0.2);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.muñeco = object;
     });
 
     this.platformGroup = new THREE.Group();
