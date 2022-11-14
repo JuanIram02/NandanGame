@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 10.11.2022 23:05:42
+# File Created: 13.11.2022 22:17:31
 
-newmtl roca_nieve_roca_nieve_lambert11SG
+newmtl roca_roca_nieve_roca_nieve_lambert11SG
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
@@ -12,5 +12,5 @@ newmtl roca_nieve_roca_nieve_lambert11SG
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka nieve_baase3.jpg
-	map_Kd nieve_baase3.jpg
+	map_Ka nieveBase_Specular.png
+	map_Kd nieveBase_Specular.png

@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 10.11.2022 22:56:40
+# File Created: 13.11.2022 15:42:23
 
-newmtl plataforma_3_plataforma_3_lambert9SG
+newmtl plataforma_3_plataforma_3_plataforma_3_lambert9SG
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
@@ -12,5 +12,5 @@ newmtl plataforma_3_plataforma_3_lambert9SG
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\GRAFICAS\MODELOS\Modelos Nieve\Plataformas\nieve_base1.jpg
-	map_Kd D:\GRAFICAS\MODELOS\Modelos Nieve\Plataformas\nieve_base1.jpg
+	map_Ka nieveBase_Specular.png
+	map_Kd nieveBase_Specular.png

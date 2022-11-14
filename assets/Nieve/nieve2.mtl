@@ -1,0 +1,44 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 13.11.2022 19:34:27
+
+newmtl lambert4
+	Ns 0.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.8000 0.8000 0.8000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\fer_m\Downloads\IceSign\IceSign\textures\WOOD05L.JPG
+	map_Kd C:\Users\fer_m\Downloads\IceSign\IceSign\textures\WOOD05L.JPG
+	map_bump C:\Users\fer_m\Downloads\IceSign\IceSign\textures\WOOD05LB.JPG
+	bump C:\Users\fer_m\Downloads\IceSign\IceSign\textures\WOOD05LB.JPG
+
+newmtl blinn2
+	Ns 26.5805
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl lambert3
+	Ns 0.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.8000 0.8000 0.8000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\fer_m\Downloads\IceSign\IceSign\textures\ice111.jpg
+	map_Kd C:\Users\fer_m\Downloads\IceSign\IceSign\textures\ice111.jpg
