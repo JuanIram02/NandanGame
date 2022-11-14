@@ -67,6 +67,11 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
+    this.ymir.scale.set(2, 2, 2);
+    this.ymir.rotation.y = Math.PI;
+    this.ymir.position.set(20, 0, 20);
+    this.scene.add(this.ymir);
+
     this.addPlatform();
 
     this.cy = this.jet.position.y;
@@ -157,6 +162,13 @@ Game.loadResources = function() {
         mesh: null
     }
 
+    var ymir = {
+        path: "assets/Personajes/",
+        obj: "ymir.obj",
+        mtl: "ymir.mtl",
+        mesh: null
+    };
+
     loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
         object.scale.set(0.2, 0.2, 0.2);
         object.rotation.x = THREE.Math.degToRad(-90);
@@ -206,6 +218,17 @@ Game.loadResources = function() {
             }
         });
         Game.muñeco = object;
+    });
+
+    loadOBJWithMTL(ymir.path, ymir.obj, ymir.mtl, (object) => {
+        object.scale.set(0.2, 0.2, 0.2);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.ymir = object;
     });
 
     this.platformGroup = new THREE.Group();
