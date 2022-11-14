@@ -15,7 +15,7 @@ const model = new Promise((res, rej) => {
 
 const animation = new Promise((res, rej) => {
     const loader = new FBXLoader();
-    loader.load( 'assets/Personajes/Animations/walking.fbx', function ( object ) {				
+    loader.load( 'assets/Personajes/Animations/idle.fbx', function ( object ) {				
         res(object);
 	} );
 })
