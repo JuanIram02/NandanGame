@@ -1,7 +1,8 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.module.js';
 import {MTLLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/OBJLoader.js';
-//import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
+import model from './Loader.js';
 
 var Game = Game || {};
 Game.player = { 
@@ -25,6 +26,7 @@ Game.gameOver = false;
 Game.score = 0;
 
 var deltaTime;
+let mixer;
 var keys = {};
 
 Game.addLoader = function() {
@@ -67,10 +69,9 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
-    this.ymir.scale.set(2, 2, 2);
-    this.ymir.rotation.y = Math.PI;
-    this.ymir.position.set(20, 0, 20);
-    this.scene.add(this.ymir);
+    this.Ty.position.set(20, 0, 20);
+    this.Ty.scale.set(0.02, 0.02, 0.02);
+    this.scene.add(this.Ty);
 
     this.addPlatform();
 
@@ -141,13 +142,6 @@ Game.loadResources = function() {
         mesh: null
     };
 
-    var jet2 = {
-        path: "assets/jet/",
-        obj: "jetski.obj",
-        mtl: "jetski.mtl",
-        mesh: null
-    };
-
     var platform = {
         path: "assets/Nieve/",
         obj: "plataforma_2.obj",
@@ -168,6 +162,20 @@ Game.loadResources = function() {
         mtl: "ymir.mtl",
         mesh: null
     };
+
+    var Ty = {
+        path: "assets/Personajes/Jugador.fbx"
+    }
+
+    model.then(object => {
+        mixer = new THREE.AnimationMixer( object[0] );
+        object[0].animations = object[1].animations
+
+		const action = mixer.clipAction( object[0].animations[ 0 ] );
+		action.play();
+
+        Game.Ty = object[0];
+    })
 
     loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
         object.scale.set(0.2, 0.2, 0.2);
@@ -435,6 +443,7 @@ function update() {
     requestAnimationFrame(update);
 
     deltaTime = Game.clock.getDelta();
+    if ( mixer ) mixer.update( deltaTime );
 
     Game.updateKeyboard();
     Game.renderer.render(Game.scene, Game.camera);
