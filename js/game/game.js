@@ -1,7 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.module.js';
 import {MTLLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/OBJLoader.js';
-//import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
 
 var Game = Game || {};
 Game.player = { 
@@ -67,10 +67,10 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
-    this.ymir.scale.set(2, 2, 2);
-    this.ymir.rotation.y = Math.PI;
-    this.ymir.position.set(20, 0, 20);
-    this.scene.add(this.ymir);
+    this.Ty.scale.set(2, 2, 2);
+    this.Ty.rotation.y = Math.PI;
+    this.Ty.position.set(20, 0, 20);
+    this.scene.add(this.Ty);
 
     this.addPlatform();
 
@@ -169,6 +169,10 @@ Game.loadResources = function() {
         mesh: null
     };
 
+    var Ty = {
+        path: "assets/Personajes/Ty.fbx;"
+    }
+
     loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
         object.scale.set(0.2, 0.2, 0.2);
         object.rotation.x = THREE.Math.degToRad(-90);
@@ -230,6 +234,8 @@ Game.loadResources = function() {
         });
         Game.ymir = object;
     });
+
+    loadOBJWithFBX(Ty.path);
 
     this.platformGroup = new THREE.Group();
     this.scene.add(this.platformGroup);
@@ -343,6 +349,19 @@ function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
         });
 
     });
+}
+
+function loadOBJWithFBX(pathFile, onLoadCallback) {
+    const loader = new FBXLoader();
+	loader.load( pathFile, function ( object ) {
+        object.traverse( function ( child ) {
+            if ( child.isMesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        } );
+        Game.Ty = object;					
+	});
 }
 
 function onKeyDown(event) {
