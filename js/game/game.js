@@ -55,7 +55,7 @@ Game.addLoader = function() {
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
     this.jet.scale.set(1, 1, 1);
-    this.jet.position.set(0, 9.8, 20);
+    this.jet.position.set(0, -30, 20);
     this.scene.add(this.jet);
 
     this.muñeco.scale.set(6.5, 6.5, 6.5);
@@ -153,9 +153,7 @@ Game.onResourcesLoaded = function() {
     this.copo4.position.set(35, 25, 2);
     this.scene.add(this.copo4);
 
-    this.roca.scale.set(5, 5, 5);
-    this.roca.position.set(65, 35, 2);
-    this.scene.add(this.roca);
+
 
     this.sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
@@ -433,7 +431,7 @@ Game.loadResources = function() {
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
         object.scale.set(1, 1, 1);
-        object.scale.set(10, 10, 7);
+        object.scale.set(10, 10, 16);
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -446,7 +444,7 @@ Game.loadResources = function() {
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
-        object.scale.set(10, 4, 7)
+        object.scale.set(10, 4, 16)
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -713,6 +711,7 @@ Game.loadResources = function() {
 
     loadOBJWithMTL(pico.path, pico.obj, pico.mtl, (object) => {
         object.scale.set(1, 1, 1);
+        object.scale.set(7, 8, 7);
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
                 node.castShadow = true;
@@ -724,6 +723,7 @@ Game.loadResources = function() {
 
     loadOBJWithMTL(roca.path, roca.obj, roca.mtl, (object) => {
         object.scale.set(1, 1, 1);
+        object.scale.set(6, 6, 6);
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
                 node.castShadow = true;
@@ -747,7 +747,9 @@ Game.addPlatform = function() {
     var platformPieceType = [
         { type: this.GREEN_PIECE },
         { type: this.RED_PIECE },
-        { type: this.PICOS }
+        { type: this.PICOS },
+        { type: this.ROCAS }
+
     ];
 
     var yDiff = 20;
@@ -761,19 +763,20 @@ Game.addPlatform = function() {
 
     var randomPlatform = [
         {
-            count: 8,
-            separation: [-2, -1, 0, 1, 2, 3, 4, 5],
-            type: [1, 2, 1, 1, 1, 1, 1, 1]
+            count: 47,
+            separation: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                         19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
+            type: [1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2]
         },
         {
-            count: 4,
-            separation: [-2, -1, 2, 3],
-            type: [0, 0, 0, 0]
+            count: 11,
+            separation: [-2, -1, 2, 3, 15, 19, 22, 23, 29, 34, 39],
+            type: [0, 0, 0, 0, 3, 3, 0, 0, 3, 0, 0]
         },
         {
-            count: 5,
-            separation: [6, 7, 8, 11, 12],
-            type: [0, 0, 0, 0, 0]
+            count: 11,
+            separation: [6, 7, 8, 11, 12, 17, 26, 36, 37, 41, 42],
+            type: [0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 3]
         },
     ];
     
@@ -799,12 +802,17 @@ Game.addPlatform = function() {
                 
             if (platformPieceType[type[i]].type === this.GREEN_PIECE){
                 platformPiece = this.platformFlying.clone();
-                platformPiece.position.set(0, 7.5, 20);
+                platformPiece.position.set(0, 6.5, 20);
             }
 
             if (platformPieceType[type[i]].type === this.PICOS){
                 platformPiece = this.pico.clone();
-                platformPiece.position.set(0, -1, 20);
+                platformPiece.position.set(0, -4, 20);
+            }
+
+            if (platformPieceType[type[i]].type === this.ROCAS){
+                platformPiece = this.roca.clone();
+                platformPiece.position.set(0, 4, 20);
             }
 
 
