@@ -13,7 +13,7 @@ Game.player = {
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
 };
-Game.MESH_VISIBILTY = false;
+Game.MESH_VISIBILTY = true;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
 Game.GAME_STARTED = false;
@@ -182,7 +182,7 @@ Game.init = function() {
     this.scene = new THREE.Scene();
 
     var visibleSize = { width: window.innerWidth, height: window.innerHeight};
-    this.camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 100);
+    this.camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 200);
 	this.camera.position.z = 80;
 	this.camera.position.y = 40;
 
@@ -220,7 +220,7 @@ Game.loadResources = function() {
     //FONDO  
     let texture_ft = new THREE.TextureLoader().load('assets/Nieve.png');        
     var bgMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(290, 200, 4, 0),
+        new THREE.PlaneGeometry(600, 400, 4, 0),
         new THREE.MeshBasicMaterial({
             map: texture_ft,
             wireframe: false,
@@ -229,7 +229,7 @@ Game.loadResources = function() {
     );
 
     bgMesh.receiveShadow = true;
-    bgMesh.position.set(0, 30, -10)
+    bgMesh.position.set(0, 30, -100)
     this.scene.add(bgMesh);
 
     //CARGA DE MODELOS 
