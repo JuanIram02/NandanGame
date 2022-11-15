@@ -369,15 +369,13 @@ function onKeyUp(event) {
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
         if (keys["%"]) { // left arrow key
-            this.platformGroup.position.x += this.player.moveSpeed;
+            this.Ty.position.x += this.player.moveSpeed;
         }
 
         if (keys["'"]) { // right arrow key
-            this.platformGroup.position.x -= this.player.moveSpeed;
+            this.Ty.position.x -= this.player.moveSpeed;
         }
 
-        var yaw = 0;
-		var forward = 0;
 		if (keys["A"]) {
 			yaw = 5;
 		} else if (keys["D"]) {

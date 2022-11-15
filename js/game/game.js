@@ -118,6 +118,9 @@ Game.addLights = function() {
 
 Game.loadResources = function() {
 
+    this.Background = new THREE.Group();
+    this.scene.add(this.Background);
+
     let texture_ft = new THREE.TextureLoader().load('assets/bk.jpg');           
     var bgMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(260, 150, 4, 5),
@@ -127,10 +130,11 @@ Game.loadResources = function() {
             side: THREE.DoubleSide
         })
     );
-
     bgMesh.receiveShadow = true;
     bgMesh.position.set(0, 30, -4)
-    this.scene.add(bgMesh);
+    this.Background.add(bgMesh);
+
+    this.scene.add(this.Background);
 
     var platform = {
         path: "assets/Nieve/",
@@ -201,8 +205,7 @@ Game.loadResources = function() {
     });
 
     this.platformGroup = new THREE.Group();
-    this.scene.add(this.platformGroup);
-    
+    this.scene.add(this.platformGroup);   
 
 }
 
@@ -348,11 +351,15 @@ function onKeyUp(event) {
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
         if (keys["%"]) { // left arrow key
-            this.platformGroup.position.x += this.player.moveSpeed;
+            this.Ty.position.x -= this.player.moveSpeed;
+            this.camera.translateX(-this.player.moveSpeed);
+            this.Background.translateX(-this.player.moveSpeed);
         }
 
         if (keys["'"]) { // right arrow key
-            this.platformGroup.position.x -= this.player.moveSpeed;
+            this.Ty.position.x += this.player.moveSpeed;
+            this.camera.translateX(this.player.moveSpeed);
+            this.Background.translateX(this.player.moveSpeed);
         }
 
         var yaw = 0;
