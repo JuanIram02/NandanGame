@@ -2,7 +2,6 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.m
 import {MTLLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/OBJLoader.js';
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
-import model from './Loader.js';
 
 var Game = Game || {};
 Game.player = { 
@@ -53,9 +52,6 @@ Game.addLoader = function() {
 }
 
 Game.onResourcesLoaded = function() {
-    this.jet.scale.set(1, 1, 1);
-    this.jet.position.set(0, 12, 4);
-    this.scene.add(this.jet);
 
     this.muñeco.scale.set(2, 2, 2);
     this.muñeco.rotation.y = Math.PI;
@@ -64,18 +60,19 @@ Game.onResourcesLoaded = function() {
    
     this.sphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
-    this.sphere.position.set(this.jet.position.x, this.jet.position.y, this.jet.position.z);
+    this.sphere.position.set(this.Ty.position.x, this.Ty.position.y, this.Ty.position.z);
     this.sphere.geometry.computeBoundingSphere();
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
-    this.Ty.position.set(20, 0, 20);
-    this.Ty.scale.set(0.02, 0.02, 0.02);
+    this.Ty.position.set(0, 12, 4);
+    this.Ty.scale.set(0.05, 0.05, 0.05);
+    this.Ty.rotation.y = Math.PI / 2;
     this.scene.add(this.Ty);
 
     this.addPlatform();
 
-    this.cy = this.jet.position.y;
+    this.cy = this.Ty.position.y;
 }
 
 Game.init = function() {
@@ -135,13 +132,6 @@ Game.loadResources = function() {
     bgMesh.position.set(0, 30, -4)
     this.scene.add(bgMesh);
 
-    var jet = {
-        path: "assets/jet/",
-        obj: "jetski.obj",
-        mtl: "jetski.mtl",
-        mesh: null
-    };
-
     var platform = {
         path: "assets/Nieve/",
         obj: "plataforma_2.obj",
@@ -156,38 +146,20 @@ Game.loadResources = function() {
         mesh: null
     }
 
-    var ymir = {
+    var Player = {
         path: "assets/Personajes/",
-        obj: "ymir.obj",
-        mtl: "ymir.mtl",
-        mesh: null
-    };
-
-    var Ty = {
-        path: "assets/Personajes/Jugador.fbx"
+        obj: "Jugador.fbx",
+        animationRun: "Animations/Fast Run.fbx",
     }
 
-    model.then(object => {
+    loadFBX(Player.path, Player.obj, Player.animationRun, (object) => {
         mixer = new THREE.AnimationMixer( object[0] );
-        object[0].animations = object[1].animations
+        object[0].animations = object[1].animations;
 
 		const action = mixer.clipAction( object[0].animations[ 0 ] );
 		action.play();
 
         Game.Ty = object[0];
-    })
-
-    loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.rotation.x = THREE.Math.degToRad(-90);
-        object.rotation.z = THREE.Math.degToRad(-90);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.jet = object;
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
@@ -226,17 +198,6 @@ Game.loadResources = function() {
             }
         });
         Game.muñeco = object;
-    });
-
-    loadOBJWithMTL(ymir.path, ymir.obj, ymir.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.ymir = object;
     });
 
     this.platformGroup = new THREE.Group();
@@ -353,6 +314,30 @@ function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
     });
 }
 
+function loadFBX(path, obj, animacion, onLoadCallback) {
+
+    var player = [];
+    const loader = new FBXLoader(Game.loadingManager);
+    loader.setPath(path);
+    loader.load(obj, function ( object ) {				
+        object.traverse( function ( child ) {
+            if ( child.isMesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        player.push(object);
+    } );
+
+    loader.load( animacion, function ( object ) {	
+        player.push(object);
+        onLoadCallback(player);
+    });       
+
+    
+
+}
+
 function onKeyDown(event) {
     keys[String.fromCharCode(event.keyCode)] = true;
 }
@@ -411,13 +396,13 @@ Game.findCollision = function() {
     if (this.colliderArr[ind]) {
         for (var i = 0; i < this.colliderArr[ind].length; i++) {
 
-                this.jet.children[0].geometry.computeBoundingBox(); 
+                this.Ty.children[0].children[0].geometry.computeBoundingBox(); 
                 this.colliderArr[ind][i].geometry.computeBoundingBox();
-                this.jet.updateMatrixWorld();
+                this.Ty.updateMatrixWorld();
                 this.colliderArr[ind][i].updateMatrixWorld();
     
-                var box1 = this.jet.children[0].geometry.boundingBox.clone();
-                box1.applyMatrix4(this.jet.matrixWorld);
+                var box1 = this.Ty.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.Ty.matrixWorld);
     
                 var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
                 box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
@@ -467,11 +452,11 @@ function update() {
                     Game.vy -= Game.gravity;      
                                
                 Game.cy += Game.vy * Game.dt;
-                Game.jet.position.y = Game.cy; 
+                Game.Ty.position.y = Game.cy; 
             }                                                                                                                     
 
-            Game.sphere.position.set(Game.jet.position.x, 
-            Game.jet.position.y, Game.jet.position.z);
+            Game.sphere.position.set(Game.Ty.position.x, 
+            Game.Ty.position.y, Game.Ty.position.z);
             Game.collision = Game.findCollision();
         }
     }
