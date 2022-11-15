@@ -13,7 +13,7 @@ Game.player = {
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
 };
-Game.MESH_VISIBILTY = true;
+Game.MESH_VISIBILTY = false;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
 Game.GAME_STARTED = false;
@@ -56,7 +56,7 @@ Game.addLoader = function() {
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
     this.jet.scale.set(1, 1, 1);
-    this.jet.position.set(0, -30, 20);
+    this.jet.position.set(-10, 30, 20);
     this.scene.add(this.jet);
 
     this.muñeco.scale.set(6.5, 6.5, 6.5);
