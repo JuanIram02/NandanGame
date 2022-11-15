@@ -56,7 +56,7 @@ Game.onResourcesLoaded = function() {
     this.muñeco.scale.set(2, 2, 2);
     this.muñeco.rotation.y = Math.PI;
     this.muñeco.position.set(0, 0, 20);
-    this.scene.add(this.muñeco);
+    this.Background.add(this.muñeco);
    
     this.sphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
@@ -133,8 +133,6 @@ Game.loadResources = function() {
     bgMesh.receiveShadow = true;
     bgMesh.position.set(0, 30, -4)
     this.Background.add(bgMesh);
-
-    this.scene.add(this.Background);
 
     var platform = {
         path: "assets/Nieve/",
