@@ -208,7 +208,7 @@ Game.onResourcesLoaded = function() {
     this.pinoVerde4.position.set(-23, 33, -16);
     this.scene.add(this.pinoVerde4);  
 
-    this.cartel2.scale.set(8, 8, 8);
+    this.cartel2.scale.set(9, 8, 9  );
     this.cartel2.position.set(-90, 30, -4);
     this.scene.add(this.cartel2);
 
