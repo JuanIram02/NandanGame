@@ -12,5 +12,5 @@ newmtl mountain_mountain_OBJ_mountain
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\xampp\htdocs\NandanGame\assets\Desierto\montana.jpg
-	map_Kd C:\xampp\htdocs\NandanGame\assets\Desierto\montana.jpg
+	map_Ka montana.jpg
+	map_Kd montana.jpg
