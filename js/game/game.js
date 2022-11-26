@@ -5,9 +5,11 @@ import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm
 
 var Game = Game || {};
 Game.player = { 
-    height: 2, 
-    speed: 0.1, 
-    turnSpeed: Math.PI * 0.02, 
+    collision: false,
+    isFalling: false,
+    canJump: false,
+    cy: 0,
+    vy: 0,
     moveSpeed: 1
 };
 Game.materials = {
@@ -20,9 +22,7 @@ Game.GAME_STARTED = false;
 Game.RED_PIECE = 10;
 Game.GREEN_PIECE = 11;
 
-Game.cameraY = -0.5;
 Game.gameOver = false;
-Game.score = 0;
 
 var deltaTime;
 let mixer;
@@ -60,19 +60,19 @@ Game.onResourcesLoaded = function() {
    
     this.sphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
-    this.sphere.position.set(this.Ty.position.x, this.Ty.position.y, this.Ty.position.z);
+    this.sphere.position.set(this.player.object.position.x, this.player.object.position.y, this.player.object.position.z);
     this.sphere.geometry.computeBoundingSphere();
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
-    this.Ty.position.set(0, 12, 4);
-    this.Ty.scale.set(0.05, 0.05, 0.05);
-    this.Ty.rotation.y = Math.PI / 2;
-    this.scene.add(this.Ty);
+    this.player.object.position.set(0, 12, 4);
+    this.player.object.scale.set(0.05, 0.05, 0.05);
+    this.player.object.rotation.y = Math.PI / 2;
+    this.scene.add(this.player.object);
 
     this.addPlatform();
 
-    this.cy = this.Ty.position.y;
+    this.player.cy = this.player.object.position.y;
 }
 
 Game.init = function() {
@@ -161,7 +161,7 @@ Game.loadResources = function() {
 		const action = mixer.clipAction( object[0].animations[ 0 ] );
 		action.play();
 
-        Game.Ty = object[0];
+        Game.player.object = object[0];
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
@@ -349,13 +349,13 @@ function onKeyUp(event) {
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
         if (keys["%"]) { // left arrow key
-            this.Ty.position.x -= this.player.moveSpeed;
+            this.player.object.position.x -= this.player.moveSpeed;
             this.camera.translateX(-this.player.moveSpeed);
             this.Background.translateX(-this.player.moveSpeed);
         }
 
         if (keys["'"]) { // right arrow key
-            this.Ty.position.x += this.player.moveSpeed;
+            this.player.object.position.x += this.player.moveSpeed;
             this.camera.translateX(this.player.moveSpeed);
             this.Background.translateX(this.player.moveSpeed);
         }
@@ -376,17 +376,17 @@ Game.updateKeyboard = function() {
 			Game.camera.position.y -= 10 * deltaTime;
 		}
         if (keys[" "]){
-			if(Game.canJump){
+			if(Game.player.canJump){
                 
-                Game.vy = 10;
-                Game.canJump = false; 
-                Game.collision = false;  
-                Game.isFalling = true;   
+                Game.player.vy = 10;
+                Game.player.canJump = false; 
+                Game.player.collision = false;  
+                Game.player.isFalling = true;   
 
             }
 		}
         if (!keys[" "]){		
-            Game.isJumping = false;
+            Game.player.isJumping = false;
 		}
 		
 		Game.camera.rotation.y += yaw * deltaTime;
@@ -396,18 +396,18 @@ Game.updateKeyboard = function() {
 
 Game.findCollision = function() {
 
-    var ind = Math.abs(Math.round(this.cy));
+    var ind = Math.abs(Math.round(this.player.cy));
 
     if (this.colliderArr[ind]) {
         for (var i = 0; i < this.colliderArr[ind].length; i++) {
 
-                this.Ty.children[0].children[0].geometry.computeBoundingBox(); 
+                this.player.object.children[0].children[0].geometry.computeBoundingBox(); 
                 this.colliderArr[ind][i].geometry.computeBoundingBox();
-                this.Ty.updateMatrixWorld();
+                this.player.object.updateMatrixWorld();
                 this.colliderArr[ind][i].updateMatrixWorld();
     
-                var box1 = this.Ty.children[0].children[0].geometry.boundingBox.clone();
-                box1.applyMatrix4(this.Ty.matrixWorld);
+                var box1 = this.player.object.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.player.object.matrixWorld);
     
                 var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
                 box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
@@ -421,12 +421,9 @@ Game.findCollision = function() {
 }
 
 Game.resetGravity = function  () {
-    this.cy = 0;   //currrent y position
     this.dt = 0.1; //delta time to make smooth movement
-    this.vy = 0;   //velocity
     this.mvy = 10;  //max velocity
     this.gravity = 0.2;
-    this.collision = false;
 }
 
 function update() {
@@ -441,28 +438,28 @@ function update() {
     if (Game.GAME_STARTED) {
         if (!Game.gameOver) {                                              
 
-            if (Game.collision) { // ball is on surface
-                Game.vy = 0;
-                Game.canJump = true;
-                Game.isFalling = false;
+            if (Game.player.collision) { // ball is on surface
+                Game.player.vy = 0;
+                Game.player.canJump = true;
+                Game.player.isFalling = false;
             }        
             else{
-                Game.isFalling = true;
+                Game.player.isFalling = true;
             }    
 
-            if(Game.isFalling) {       
+            if(Game.player.isFalling) {       
               
-                Game.canJump = false;
-                if(Game.vy <= Game.mvy && Game.vy >= -Game.mvy)
-                    Game.vy -= Game.gravity;      
+                Game.player.canJump = false;
+                if(Game.player.vy <= Game.mvy && Game.player.vy >= -Game.mvy)
+                    Game.player.vy -= Game.gravity;      
                                
-                Game.cy += Game.vy * Game.dt;
-                Game.Ty.position.y = Game.cy; 
+                Game.player.cy += Game.player.vy * Game.dt;
+                Game.player.object.position.y = Game.player.cy; 
             }                                                                                                                     
 
-            Game.sphere.position.set(Game.Ty.position.x, 
-            Game.Ty.position.y, Game.Ty.position.z);
-            Game.collision = Game.findCollision();
+            Game.sphere.position.set(Game.player.object.position.x, 
+            Game.player.object.position.y, Game.player.object.position.z);
+            Game.player.collision = Game.findCollision();
         }
     }
 }
