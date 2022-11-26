@@ -13,6 +13,8 @@ Game.player = {
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
 };
+
+//VARIABLES
 Game.MESH_VISIBILTY = true;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
