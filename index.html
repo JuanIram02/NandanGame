@@ -14,6 +14,7 @@
         height: 20px;
         background: #000;
         border: 2px solid #000;
+        position: absolute;
     }
     
     #bar {
@@ -21,19 +22,22 @@
         height: 20px;
         background: red;
         border: none;
+        position: absolute;
     }
     
-    #scoreBoard {
+    #timer {
         width: auto;
         height: 25px;
         font-weight: bold;
         position: absolute;
+        font-size: xx-large;
+        left: 1000px;
     }
     </style>
     
 
 <body style="text-align:center;">
-    <p id="scoreBoard">Score 0</p>
+    <p id="timer">Time: 0:00</p>
     <script src="js\game\game.js" type="module"></script>
 </body>
 

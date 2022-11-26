@@ -24,7 +24,7 @@ Game.GREEN_PIECE = 11;
 
 Game.gameOver = false;
 
-var deltaTime;
+var deltaTime = 0;
 let mixer;
 var keys = {};
 
@@ -78,6 +78,8 @@ Game.onResourcesLoaded = function() {
 Game.init = function() {
 
     this.resetGravity();
+
+    this.timer = document.getElementById("timer");
 
     this.scene = new THREE.Scene();
 
@@ -334,9 +336,7 @@ function loadFBX(path, obj, animacion, onLoadCallback) {
         player.push(object);
         onLoadCallback(player);
     });       
-
     
-
 }
 
 function onKeyDown(event) {
@@ -426,16 +426,44 @@ Game.resetGravity = function  () {
     this.gravity = 0.2;
 }
 
+function timer() {
+
+    var num = Game.clock.getElapsedTime();
+    var minutos = Math.floor(num / 60);  
+    var segundos = Math.round(num % 60);
+
+    if(minutos < 10){
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: 0" + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: 0" + minutos + ":" + segundos;
+        }
+    }
+    else{
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: " + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: " + minutos + ":" + segundos;
+        }
+    }      
+
+}
+
 function update() {
     requestAnimationFrame(update);
-
-    deltaTime = Game.clock.getDelta();
-    if ( mixer ) mixer.update( deltaTime );
 
     Game.updateKeyboard();
     Game.renderer.render(Game.scene, Game.camera);
 
     if (Game.GAME_STARTED) {
+     
+        deltaTime = Game.clock.getDelta();
+        if ( mixer ) mixer.update( deltaTime );    
+
+        timer();
+
         if (!Game.gameOver) {                                              
 
             if (Game.player.collision) { // ball is on surface
