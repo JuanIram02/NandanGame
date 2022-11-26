@@ -54,7 +54,6 @@ Game.addLoader = function() {
         Game.onResourcesLoaded();
     };
 }
-
     
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
@@ -63,8 +62,8 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.jet);
 
     this.mountain.rotation.y=0;
-    this.mountain.scale.set(7, 15, 7);
-    this.mountain.position.set(0, 7, -67);
+    this.mountain.scale.set(12, 15, 7);
+    this.mountain.position.set(0, 5, -67);
     this.scene.add(this.mountain);
 
     this.plano.scale.set(7, 7, 7);
@@ -88,12 +87,12 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.Cactus_mini); 
 
     this.craneo.scale.set(2, 2, 2);
-    this.craneo.position.set(-80, 60,-30);
+    this.craneo.position.set(-87, 63,-30);
     this.scene.add(this.craneo_fox);
 
     this.craneo_fox.scale.set(3, 3, 3);
     this.craneo_fox.rotation.y=-90;
-    this.craneo_fox.position.set(-45,105,-105);
+    this.craneo_fox.position.set(-75,105,-105);
     this.scene.add(this.craneo);
 
     this.sphere = new THREE.Mesh(
@@ -189,7 +188,7 @@ Game.loadResources = function() {
 
 
     var pico = {
-        path: "assets/Desierto/",
+        path: "assets/Nieve/picos",
         obj: "picos.obj",
         mtl: "picos.mtl",
         mesh: null
