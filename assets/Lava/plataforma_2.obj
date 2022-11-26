@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 13.11.2022 21:18:30
+# File Created: 26.11.2022 03:48:05
 
 mtllib plataforma_2.mtl
 
@@ -2376,7 +2376,7 @@ vt 0.1345 0.7353 0.0000
 
 o plataforma_2
 g plataforma_2
-usemtl plataforma_2_wire_143224087
+usemtl Material__45
 s off
 f 1/1/1 2/2/2 3/3/3 
 f 4/4/4 2/2/2 5/5/5 

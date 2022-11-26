@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 13.11.2022 00:49:13
+# File Created: 26.11.2022 03:11:23
 
-newmtl plataforma_2_plataforma_2_initialShadingGroup
+newmtl plataforma_2_plataforma_2_plataforma_2_wire_143224087
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
@@ -12,5 +12,8 @@ newmtl plataforma_2_plataforma_2_initialShadingGroup
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka arena_base.jpg
-	map_Kd arena_base.jpg
+	map_Ka C:\xampp\htdocs\NandanGame\assets\Lava\montana-1.jpg
+	map_Kd C:\xampp\htdocs\NandanGame\assets\Lava\montana-1.jpg
+	map_Ks C:\xampp\htdocs\NandanGame\assets\Lava\roca_Specular.png
+	map_bump C:\xampp\htdocs\NandanGame\assets\Lava\roca_Normalp.png
+	bump C:\xampp\htdocs\NandanGame\assets\Lava\roca_Normalp.png

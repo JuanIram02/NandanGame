@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 25.11.2022 23:43:48
+# File Created: 26.11.2022 01:22:42
 
-newmtl montana_Montana_lambert5SG
+newmtl montana_montana_Montana_lambert5SG
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000

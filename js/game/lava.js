@@ -54,7 +54,6 @@ Game.addLoader = function() {
         Game.onResourcesLoaded();
     };
 }
-
     
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
@@ -62,157 +61,14 @@ Game.onResourcesLoaded = function() {
     this.jet.position.set(-10, 30, 20);
     this.scene.add(this.jet);
 
-    this.muñeco.scale.set(5.5, 5.5, 5.5);
-    this.muñeco.rotation.y = Math.PI;
-    this.muñeco.position.set(10, 9, -2);
-    this.scene.add(this.muñeco);
-   
-    this.arbol1.scale.set(8, 10, 8);
-    this.arbol1.position.set(-50, 14, -4);
-    this.scene.add(this.arbol1);
-
-    this.arbol2.scale.set(7, 9, 7);
-    this.arbol2.position.set(50, 11, -6);
-    this.scene.add(this.arbol2);
-
-    this.arbol3.scale.set(5, 7, 7);
-    this.arbol3.position.set(-75, 12, -4);
-    this.scene.add(this.arbol3);
-
-    this.mountain.scale.set(7, 10, 7);
-    this.mountain.position.set(0, 7, -67);
+    this.mountain.scale.set(12, 15, 12);
+    this.mountain.position.set(0, 0, -108);
+    this.mountain.rotation.y = 90; 
     this.scene.add(this.mountain);
 
-    this.arbol4.scale.set(6, 8, 6);
-    this.arbol4.position.set(25, 22, -3);
-    this.scene.add(this.arbol4);
-
-    this.arbol5.scale.set(3, 5, 3);
-    this.arbol5.position.set(-5, 20, -3);
-    this.scene.add(this.arbol5);
-
-    this.cartel.scale.set(8, 8, 8);
-    this.cartel.position.set(-18, 20, -3);
-    this.scene.add(this.cartel);
-
-    this.rama.scale.set(5, 5, 5);
-    this.rama.position.set(-18.5, 21.6, -3);
-    this.scene.add(this.rama);
-
-    this.nieve.scale.set(5, 5, 5);
-    this.nieve.position.set(-18, 20, -5);
-    this.scene.add(this.nieve);
-
-    this.rama1.scale.set(3, 3, 3);
-    this.rama1.position.set(-15, 21.6, -3);
-    this.scene.add(this.rama1);
-
-    this.muñeco1.scale.set(3.5, 3.5, 3.5);
-    this.muñeco1.rotation.y = Math.PI;
-    this.muñeco1.position.set(-30, 21, -3);
-    this.scene.add(this.muñeco1);
-
-    this.muñeco2.scale.set(3, 3.5, 3);
-    this.muñeco2.rotation.y = Math.PI;
-    this.muñeco2.position.set(80, 18, -3);
-    this.scene.add(this.muñeco2);
-
-    this.nieve1.scale.set(5, 5, 5);
-    this.nieve1.position.set(79, 18, -3);
-    this.scene.add(this.nieve1);
-
-    this.rama2.scale.set(4, 3, 4);
-    this.rama2.position.set(84, 19, -2);
-    this.scene.add(this.rama2);
-
-    this.rama3.scale.set(4, 4, 4);
-    this.rama3.position.set(76, 20, -1);
-    this.scene.add(this.rama3);
-
-    this.arbol6.scale.set(3, 5, 3);
-    this.arbol6.position.set(86, 15, 3);
-    this.scene.add(this.arbol6);
-
-    this.arbol7.scale.set(2, 3, 2);
-    this.arbol7.position.set(-20, 18, 2);
-    this.scene.add(this.arbol7);
-
-    this.copo.scale.set(5, 5, 5);
-    this.copo.position.set(-58, 25, 3);
-    this.scene.add(this.copo);
-
-    this.copo1.scale.set(5, 5, 5);
-    this.copo1.position.set(68, 30, 2);
-    this.scene.add(this.copo1);
-
-    this.copo2.scale.set(5, 5, 5);
-    this.copo2.position.set(-10, 25, 2);
-    this.scene.add(this.copo2);
-
-    this.copo3.scale.set(5, 5, 5);
-    this.copo3.position.set(-25, 30, 2);
-    this.scene.add(this.copo3);
-
-    this.copo4.scale.set(5, 5, 5);
-    this.copo4.position.set(35, 25, 2);
-    this.scene.add(this.copo4);
-
-    this.señal.scale.set(2, 2, 2);
-    this.señal.position.set(-6, 11, 4);
-    this.scene.add(this.señal);
-
-    this.pino.scale.set(6, 6, 6);
-    this.pino.position.set(-62, 78, -82);
-    this.scene.add(this.pino);
-
-    this.oso.scale.set(2, 2, 2);
-    this.oso.position.set(-90, 55, -40);
-    this.scene.add(this.oso);
-
-    this.casa.scale.set(2, 2, 2);
-    this.casa.position.set(7, 47, -54);
-    this.scene.add(this.casa);
-
-    this.arbol8.scale.set(4, 6, 4);
-    this.arbol8.position.set(-105, 55, -40);
-    this.scene.add(this.arbol8);
-
-    this.muñeco3.scale.set(3, 3.5, 3);
-    this.muñeco3.rotation.y = Math.PI;
-    this.muñeco3.position.set(-14, 48, -37);
-    this.scene.add(this.muñeco3);
-
-    this.pino1.scale.set(6, 6, 6);
-    this.pino1.position.set(68, 24, -25);
-    this.scene.add(this.pino1);     
-    
     this.plano.scale.set(7, 7, 7);
-    this.plano.position.set(0, -50.2, 0);
+    this.plano.position.set(0, -51.5, 0);
     this.scene.add(this.plano);  
-
-    this.pinoVerde.scale.set(2, 2, 2);
-    this.pinoVerde.position.set(-72, 22, -20);
-    this.scene.add(this.pinoVerde);  
-
-    this.pinoVerde1.scale.set(3, 4, 3);
-    this.pinoVerde1.position.set(-16, 48, -48);
-    this.scene.add(this.pinoVerde1);  
-
-    this.pinoVerde2.scale.set(2, 2, 2);
-    this.pinoVerde2.position.set(7, 27, -10);
-    this.scene.add(this.pinoVerde2); 
-    
-    this.pinoVerde3.scale.set(3, 2, 3);
-    this.pinoVerde3.position.set(110, 15, -20);
-    this.scene.add(this.pinoVerde3);  
-
-    this.pinoVerde4.scale.set(2, 2, 2);
-    this.pinoVerde4.position.set(-23, 33, -16);
-    this.scene.add(this.pinoVerde4);  
-
-    this.cartel2.scale.set(9, 8, 9  );
-    this.cartel2.position.set(-90, 30, -4);
-    this.scene.add(this.cartel2);
 
     this.sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
@@ -269,9 +125,9 @@ Game.addLights = function() {
 
 Game.loadResources = function() {
     //FONDO  
-    let texture_ft = new THREE.TextureLoader().load('assets/Nieve.png');        
+    let texture_ft = new THREE.TextureLoader().load('assets/volcan.jpg');        
     var bgMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(600, 400, 4, 0),
+        new THREE.PlaneGeometry(800, 500, 4, 0),
         new THREE.MeshBasicMaterial({
             map: texture_ft,
             wireframe: false,
@@ -280,7 +136,7 @@ Game.loadResources = function() {
     );
 
     bgMesh.receiveShadow = true;
-    bgMesh.position.set(0, 30, -100)
+    bgMesh.position.set(0, 30, -118)
     this.scene.add(bgMesh);
 
     //CARGA DE MODELOS 
@@ -292,175 +148,21 @@ Game.loadResources = function() {
     };
 
     var platform = {
-        path: "assets/Nieve/",
+        path: "assets/Lava/",
         obj: "plataforma_2.obj",
         mtl: "plataforma_2.mtl",
         mesh: null
     }
-
-    var muñeco = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var arbol1 = {
-        path: "assets/Nieve/arbol/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol2 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var arbol3 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
+  
     var mountain = {
-        path: "assets/Nieve/",
-        obj: "mountain.obj",
-        mtl: "mountain.mtl",
-        mesh: null
-    }
-
-    var arbol4 = {
-        path: "assets/Nieve/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol5 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var cartel = {
-        path: "assets/Nieve/",
-        obj: "cartel.obj",
-        mtl: "cartel.mtl",
-        mesh: null
-    }
-
-    var rama = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var nieve = {
-        path: "assets/Nieve/",
-        obj: "nieve.obj",
-        mtl: "nieve.mtl",
-        mesh: null
-    }
-
-    var rama1 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var muñeco1 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var muñeco2 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var nieve1 = {
-        path: "assets/Nieve/",
-        obj: "nieve.obj",
-        mtl: "nieve.mtl",
-        mesh: null
-    }
-
-    var rama2 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var rama3 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var arbol6 = {
-        path: "assets/Nieve/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol7 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var copo = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo1 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo2 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo3 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo4 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
+        path: "assets/Lava/",
+        obj: "montana.obj",
+        mtl: "montana.mtl",
         mesh: null
     }
 
     var pico = {
-        path: "assets/Nieve/picos/",
+        path: "assets/Lava/",
         obj: "picos.obj",
         mtl: "picos.mtl",
         mesh: null
@@ -473,13 +175,6 @@ Game.loadResources = function() {
         mesh: null
     }
 
-    var señal = {
-        path: "assets/Nieve/",
-        obj: "senal.obj",
-        mtl: "senal.mtl",
-        mesh: null
-    }
-
     var torre = {
         path: "assets/Nieve/",
         obj: "Torre.obj",
@@ -487,97 +182,12 @@ Game.loadResources = function() {
         mesh: null
     }
 
-    var pino = {
-        path: "assets/Nieve/",
-        obj: "pino_2.obj",
-        mtl: "pino_2.mtl",
-        mesh: null
-    }
-
-    var oso = {
-        path: "assets/Nieve/",
-        obj: "oso.obj",
-        mtl: "oso.mtl",
-        mesh: null
-    }
-
-    var casa = {
-        path: "assets/Nieve/",
-        obj: "casa.obj",
-        mtl: "casa.mtl",
-        mesh: null
-    }
-
-    var arbol8 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var muñeco3 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var pino1 = {
-        path: "assets/Nieve/",
-        obj: "pino_2.obj",
-        mtl: "pino_2.mtl",
-        mesh: null
-    }
-
     var plano = {
-        path: "assets/Nieve/",
+        path: "assets/Lava/",
         obj: "Plano.obj",
         mtl: "Plano.mtl",
         mesh: null
     }
-
-    var pinoVerde = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde1 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde2 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde3 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde4 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var cartel2 = {
-        path: "assets/Nieve/",
-        obj: "cartel.obj",
-        mtl: "cartel.mtl",
-        mesh: null
-    }
-
     //Carga de Modelos
 
     loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
@@ -620,50 +230,6 @@ Game.loadResources = function() {
         Game.platformFlying = object;
     });
 
-    loadOBJWithMTL(muñeco.path, muñeco.obj, muñeco.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco = object;
-    });
-
-    loadOBJWithMTL(arbol1.path, arbol1.obj, arbol1.mtl, (object) => {
-        object.scale.set(5, 5, 5);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol1 = object;
-    });
-
-    loadOBJWithMTL(arbol2.path, arbol2.obj, arbol2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol2 = object;
-    });
-
-    loadOBJWithMTL(arbol3.path, arbol3.obj, arbol3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol3 = object;
-    });
-
     loadOBJWithMTL(mountain.path, mountain.obj, mountain.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.traverse(function(node) {
@@ -673,204 +239,6 @@ Game.loadResources = function() {
             }
         });
         Game.mountain = object;
-    });
-
-    loadOBJWithMTL(arbol4.path, arbol4.obj, arbol4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol4 = object;
-    });
-
-    loadOBJWithMTL(arbol5.path, arbol5.obj, arbol5.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol5 = object;
-    });
-    
-    loadOBJWithMTL(cartel.path, cartel.obj, cartel.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.cartel = object;
-    });
-    
-    loadOBJWithMTL(rama.path, rama.obj, rama.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama = object;
-    });
-    
-    loadOBJWithMTL(nieve.path, nieve.obj, nieve.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.nieve = object;
-    });
-
-    loadOBJWithMTL(rama1.path, rama1.obj, rama1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama1 = object;
-    });
-
-    loadOBJWithMTL(muñeco1.path, muñeco1.obj, muñeco1.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco1 = object;
-    });
-
-    loadOBJWithMTL(muñeco2.path, muñeco2.obj, muñeco2.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco2 = object;
-    });
-
-    loadOBJWithMTL(nieve1.path, nieve1.obj, nieve1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.nieve1 = object;
-    });
-
-    loadOBJWithMTL(rama2.path, rama2.obj, rama2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama2 = object;
-    });
-
-    loadOBJWithMTL(rama3.path, rama3.obj, rama3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama3 = object;
-    });
-
-    loadOBJWithMTL(arbol6.path, arbol6.obj, arbol6.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol6 = object;
-    });
-
-    loadOBJWithMTL(arbol7.path, arbol7.obj, arbol7.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol7 = object;
-    });
-
-    loadOBJWithMTL(copo.path, copo.obj, copo.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo = object;
-    });
-
-    loadOBJWithMTL(copo1.path, copo1.obj, copo1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo1 = object;
-    });
-
-    loadOBJWithMTL(copo2.path, copo2.obj, copo2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo2 = object;
-    });
-
-    loadOBJWithMTL(copo3.path, copo3.obj, copo3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo3 = object;
-    });
-
-    loadOBJWithMTL(copo4.path, copo4.obj, copo4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo4 = object;
     });
 
     loadOBJWithMTL(pico.path, pico.obj, pico.mtl, (object) => {
@@ -897,17 +265,6 @@ Game.loadResources = function() {
         Game.roca = object;
     });
 
-    loadOBJWithMTL(señal.path, señal.obj, señal.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.señal = object;
-    });
-
     loadOBJWithMTL(torre.path, torre.obj, torre.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.scale.set(7, 7, 3.5);
@@ -920,72 +277,6 @@ Game.loadResources = function() {
         Game.torre = object;
     });
 
-    loadOBJWithMTL(pino.path, pino.obj, pino.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pino = object;
-    });
-
-    loadOBJWithMTL(oso.path, oso.obj, oso.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.oso = object;
-    });
-
-    loadOBJWithMTL(arbol8.path, arbol8.obj, arbol8.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol8 = object;
-    });
-
-    loadOBJWithMTL(casa.path, casa.obj, casa.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.casa = object;
-    });
-
-    loadOBJWithMTL(muñeco3.path, muñeco3.obj, muñeco3.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco3 = object;
-    });
-
-    loadOBJWithMTL(pino1.path, pino1.obj, pino1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pino1 = object;
-    });
-
     loadOBJWithMTL(plano.path, plano.obj, plano.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.traverse(function(node) {
@@ -995,72 +286,6 @@ Game.loadResources = function() {
             }
         });
         Game.plano = object;
-    });
-
-    loadOBJWithMTL(pinoVerde.path, pinoVerde.obj, pinoVerde.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde = object;
-    });
-
-    loadOBJWithMTL(pinoVerde1.path, pinoVerde1.obj, pinoVerde1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde1 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde2.path, pinoVerde2.obj, pinoVerde2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde2 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde3.path, pinoVerde3.obj, pinoVerde3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde3 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde4.path, pinoVerde4.obj, pinoVerde4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde4 = object;
-    });
-
-    loadOBJWithMTL(cartel2.path, cartel2.obj, cartel2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.cartel2 = object;
     });
 
     this.platformGroup = new THREE.Group();
@@ -1141,7 +366,7 @@ Game.addPlatform = function() {
 
             if (platformPieceType[type[i]].type === this.PICOS){
                 platformPiece = this.pico.clone();
-                platformPiece.position.set(0, -4, 20);
+                platformPiece.position.set(0, -4, 25);
             }
 
             if (platformPieceType[type[i]].type === this.ROCAS){
