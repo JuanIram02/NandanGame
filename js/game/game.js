@@ -1,13 +1,15 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.module.js';
 import {MTLLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/OBJLoader.js';
-//import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
 
 var Game = Game || {};
 Game.player = { 
-    height: 2, 
-    speed: 0.1, 
-    turnSpeed: Math.PI * 0.02, 
+    collision: false,
+    isFalling: false,
+    canJump: false,
+    cy: 0,
+    vy: 0,
     moveSpeed: 1
 };
 Game.materials = {
@@ -25,11 +27,11 @@ Game.PICOS = 12;
 Game.ROCA = 13;
 Game.TORRE = 14;
 
-Game.cameraY = -0.5;
 Game.gameOver = false;
-Game.score = 0;
 
-var deltaTime;
+
+var deltaTime = 0;
+let mixer;
 var keys = {};
 
 Game.addLoader = function() {
@@ -58,9 +60,6 @@ Game.addLoader = function() {
     
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
-    this.jet.scale.set(1, 1, 1);
-    this.jet.position.set(-10, 30, 20);
-    this.scene.add(this.jet);
 
     this.muñeco.scale.set(5.5, 5.5, 5.5);
     this.muñeco.rotation.y = Math.PI;
@@ -221,9 +220,14 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
+    this.player.object.position.set(0, 12, 20);
+    this.player.object.scale.set(0.05, 0.05, 0.05);
+    this.player.object.rotation.y = Math.PI / 2;
+    this.scene.add(this.player.object);
+
     this.addPlatform();
 
-    this.cy = this.jet.position.y;
+    this.player.cy = this.player.object.position.y;
 }
 
 Game.init = function() {
@@ -578,7 +582,23 @@ Game.loadResources = function() {
         mesh: null
     }
 
+    var Player = {
+        path: "assets/Personajes/",
+        obj: "Jugador.fbx",
+        animationRun: "Animations/Fast Run.fbx",
+    }
+
     //Carga de Modelos
+
+    loadFBX(Player.path, Player.obj, Player.animationRun, (object) => {
+        mixer = new THREE.AnimationMixer( object[0] );
+        object[0].animations = object[1].animations;
+
+		const action = mixer.clipAction( object[0].animations[ 0 ] );
+		action.play();
+
+        Game.player.object = object[0];
+    });
 
     loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
         object.scale.set(0.2, 0.2, 0.2);
@@ -595,7 +615,7 @@ Game.loadResources = function() {
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
         object.scale.set(1, 1, 1);
-        object.scale.set(10, 10, 16);
+        object.scale.set(10, 30, 7);
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -608,7 +628,7 @@ Game.loadResources = function() {
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
-        object.scale.set(10, 4, 16)
+        object.scale.set(10, 10, 7)
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -1131,12 +1151,12 @@ Game.addPlatform = function() {
             //diferentes tipos de plataforma, ahorita solo hay box
             if (platformPieceType[type[i]].type === this.RED_PIECE) {//this.RED_PIECE es lo que hay que modificar para que poner mas tipos
                 platformPiece = this.platformGround.clone();
-                platformPiece.position.set(0, 0, 20);
+                platformPiece.position.set(0, 2, 20);
             }
                 
             if (platformPieceType[type[i]].type === this.GREEN_PIECE){
                 platformPiece = this.platformFlying.clone();
-                platformPiece.position.set(0, 6.5, 20);
+                platformPiece.position.set(0, 7.5, 20);
             }
 
             if (platformPieceType[type[i]].type === this.PICOS){
@@ -1197,6 +1217,28 @@ function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
         });
 
     });
+}
+
+function loadFBX(path, obj, animacion, onLoadCallback) {
+
+    var player = [];
+    const loader = new FBXLoader(Game.loadingManager);
+    loader.setPath(path);
+    loader.load(obj, function ( object ) {				
+        object.traverse( function ( child ) {
+            if ( child.isMesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        player.push(object);
+    } );
+
+    loader.load( animacion, function ( object ) {	
+        player.push(object);
+        onLoadCallback(player);
+    });       
+    
 }
 
 function onKeyDown(event) {
@@ -1288,36 +1330,40 @@ Game.resetGravity = function  () {
 function update() {
     requestAnimationFrame(update);
 
-    deltaTime = Game.clock.getDelta();
-
     Game.updateKeyboard();
     Game.renderer.render(Game.scene, Game.camera);
 
     if (Game.GAME_STARTED) {
+     
+        deltaTime = Game.clock.getDelta();
+        if ( mixer ) mixer.update( deltaTime );    
+
+        //timer();
+
         if (!Game.gameOver) {                                              
 
-            if (Game.collision) { // ball is on surface
-                Game.vy = 0;
-                Game.canJump = true;
-                Game.isFalling = false;
+            if (Game.player.collision) { 
+                Game.player.vy = 0;
+                Game.player.canJump = true;
+                Game.player.isFalling = false;
             }        
             else{
-                Game.isFalling = true;
+                Game.player.isFalling = true;
             }    
 
-            if(Game.isFalling) {       
+            if(Game.player.isFalling) {       
               
-                Game.canJump = false;
-                if(Game.vy <= Game.mvy && Game.vy >= -Game.mvy)
-                    Game.vy -= Game.gravity;      
+                Game.player.canJump = false;
+                if(Game.player.vy <= Game.mvy && Game.player.vy >= -Game.mvy)
+                    Game.player.vy -= Game.gravity;      
                                
-                Game.cy += Game.vy * Game.dt;
-                Game.jet.position.y = Game.cy; 
+                Game.player.cy += Game.player.vy * Game.dt;
+                Game.player.object.position.y = Game.player.cy; 
             }                                                                                                                     
 
-            Game.sphere.position.set(Game.jet.position.x, 
-            Game.jet.position.y, Game.jet.position.z);
-            Game.collision = Game.findCollision();
+            Game.sphere.position.set(Game.player.object.position.x, 
+            Game.player.object.position.y, Game.player.object.position.z);
+            Game.player.collision = Game.findCollision();
         }
     }
 }
