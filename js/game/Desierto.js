@@ -189,7 +189,7 @@ Game.loadResources = function() {
 
 
     var pico = {
-        path: "assets/Desierto/",
+        path: "assets/Nieve/picos/",
         obj: "picos.obj",
         mtl: "picos.mtl",
         mesh: null
