@@ -220,7 +220,7 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
-    this.player.object.position.set(0, 12, 20);
+    this.player.object.position.set(-15, 12, 20);
     this.player.object.scale.set(0.05, 0.05, 0.05);
     this.player.object.rotation.y = Math.PI / 2;
     this.scene.add(this.player.object);
@@ -235,6 +235,7 @@ Game.init = function() {
     this.resetGravity();
 
     this.timer = document.getElementById("timer");
+    this.again = document.getElementById("again");
 
     this.scene = new THREE.Scene();
 
@@ -601,7 +602,7 @@ Game.loadResources = function() {
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
         object.scale.set(1, 1, 1);
-        object.scale.set(10, 30, 7);
+        object.scale.set(10, 8, 15);
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -614,7 +615,7 @@ Game.loadResources = function() {
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
-        object.scale.set(10, 10, 7)
+        object.scale.set(10, 3, 15)
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -1163,14 +1164,24 @@ Game.addPlatform = function() {
 
             collider = [];
 
-            collider.push(new THREE.Mesh(new THREE.BoxGeometry(19, 10, 1),
+            if (platformPieceType[type[i]].type === this.ROCAS){
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(12, 10, 1),
+             this.materials.solid));
+            collider[0].position.set(0, 10, 20);
+            collider[0].rotation.x += Math.PI / 2;
+            collider[0].receiveShadow = true;
+            collider[0].visible = this.MESH_VISIBILTY;
+            collider[0].platformType = platformPieceType[type[i]].type;
+            }
+            else{
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(19, 10, 1),
              this.materials.solid));
             collider[0].position.set(0, 10, 20);
             collider[0].rotation.x += Math.PI / 2;
             collider[0].receiveShadow = true;
             collider[0].visible = this.MESH_VISIBILTY;
             collider[0].platformType = platformPieceType[type[i]].type; //aqui le ponemos collider diferentes dependiendo de el tipo de pieza
-
+            }          
 
             var platGroup = new THREE.Group();
             platGroup.add(platformPiece);
@@ -1280,7 +1291,24 @@ Game.updateKeyboard = function() {
 		Game.camera.rotation.y += yaw * deltaTime;
 		Game.camera.translateZ(forward * deltaTime);
     }
+    else{
+        if (keys[" "]){		
+            Game.restart();
+		}
+    }
 }
+
+Game.restart = function () {
+  
+    this.player.object.position.set(-15, 12, 20);
+    this.camera.position.x = 0;
+    this.Background.position.x = 0;
+    this.gameOver = false;
+    this.clock = new THREE.Clock();	
+    this.again.style.display = "none"
+
+}
+
 
 Game.findCollision = function() {
 
@@ -1300,6 +1328,12 @@ Game.findCollision = function() {
                 var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
                 box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
                 if (box1.intersectsBox(box2)) {
+                    if (this.colliderArr[ind][i].platformType === this.PICOS){
+                        this.gameOver = true;
+                        this.clock.stop();
+                        Game.timer.innerHTML = "GAME OVER";
+                        Game.again.style.display = "block"
+                    }
                     return true;
                 }
         }
@@ -1348,11 +1382,11 @@ function update() {
     if (Game.GAME_STARTED) {
      
         deltaTime = Game.clock.getDelta();
-        if ( mixer ) mixer.update( deltaTime );    
+        if ( mixer ) mixer.update( deltaTime );      
 
-        timer();
+        if (!Game.gameOver) {   
 
-        if (!Game.gameOver) {                                              
+            timer();
 
             if (Game.player.collision) { 
                 Game.player.vy = 0;
