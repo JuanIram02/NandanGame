@@ -61,9 +61,9 @@ Game.onResourcesLoaded = function() {
     this.jet.position.set(-10, 30, 20);
     this.scene.add(this.jet);
 
-    this.mountain.scale.set(12, 15, 12);
-    this.mountain.position.set(0, 0, -108);
-    this.mountain.rotation.y = 90; 
+    this.mountain.scale.set(52, 150, 115);
+    this.mountain.position.set(0, 5, -10);
+    this.mountain.rotation.y = 30; 
     this.scene.add(this.mountain);
 
     this.plano.scale.set(7, 7, 7);
