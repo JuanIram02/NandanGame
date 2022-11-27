@@ -17,7 +17,7 @@ Game.materials = {
 };
 
 //VARIABLES
-Game.MESH_VISIBILTY = true;
+Game.MESH_VISIBILTY = false;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
 Game.GAME_STARTED = false;
@@ -64,158 +64,158 @@ Game.onResourcesLoaded = function() {
     this.muñeco.scale.set(5.5, 5.5, 5.5);
     this.muñeco.rotation.y = Math.PI;
     this.muñeco.position.set(10, 9, -2);
-    this.scene.add(this.muñeco);
+    this.Background.add(this.muñeco);
    
     this.arbol1.scale.set(8, 10, 8);
     this.arbol1.position.set(-50, 14, -4);
-    this.scene.add(this.arbol1);
+    this.Background.add(this.arbol1);
 
     this.arbol2.scale.set(7, 9, 7);
     this.arbol2.position.set(50, 11, -6);
-    this.scene.add(this.arbol2);
+    this.Background.add(this.arbol2);
 
     this.arbol3.scale.set(5, 7, 7);
     this.arbol3.position.set(-75, 12, -4);
-    this.scene.add(this.arbol3);
+    this.Background.add(this.arbol3);
 
     this.mountain.scale.set(7, 10, 7);
     this.mountain.position.set(0, 7, -67);
-    this.scene.add(this.mountain);
+    this.Background.add(this.mountain);
 
     this.arbol4.scale.set(6, 8, 6);
     this.arbol4.position.set(25, 22, -3);
-    this.scene.add(this.arbol4);
+    this.Background.add(this.arbol4);
 
     this.arbol5.scale.set(3, 5, 3);
     this.arbol5.position.set(-5, 20, -3);
-    this.scene.add(this.arbol5);
+    this.Background.add(this.arbol5);
 
     this.cartel.scale.set(8, 8, 8);
     this.cartel.position.set(-18, 20, -3);
-    this.scene.add(this.cartel);
+    this.Background.add(this.cartel);
 
     this.rama.scale.set(5, 5, 5);
     this.rama.position.set(-18.5, 21.6, -3);
-    this.scene.add(this.rama);
+    this.Background.add(this.rama);
 
     this.nieve.scale.set(5, 5, 5);
     this.nieve.position.set(-18, 20, -5);
-    this.scene.add(this.nieve);
+    this.Background.add(this.nieve);
 
     this.rama1.scale.set(3, 3, 3);
     this.rama1.position.set(-15, 21.6, -3);
-    this.scene.add(this.rama1);
+    this.Background.add(this.rama1);
 
     this.muñeco1.scale.set(3.5, 3.5, 3.5);
     this.muñeco1.rotation.y = Math.PI;
     this.muñeco1.position.set(-30, 21, -3);
-    this.scene.add(this.muñeco1);
+    this.Background.add(this.muñeco1);
 
     this.muñeco2.scale.set(3, 3.5, 3);
     this.muñeco2.rotation.y = Math.PI;
     this.muñeco2.position.set(80, 18, -3);
-    this.scene.add(this.muñeco2);
+    this.Background.add(this.muñeco2);
 
     this.nieve1.scale.set(5, 5, 5);
     this.nieve1.position.set(79, 18, -3);
-    this.scene.add(this.nieve1);
+    this.Background.add(this.nieve1);
 
     this.rama2.scale.set(4, 3, 4);
     this.rama2.position.set(84, 19, -2);
-    this.scene.add(this.rama2);
+    this.Background.add(this.rama2);
 
     this.rama3.scale.set(4, 4, 4);
     this.rama3.position.set(76, 20, -1);
-    this.scene.add(this.rama3);
+    this.Background.add(this.rama3);
 
     this.arbol6.scale.set(3, 5, 3);
     this.arbol6.position.set(86, 15, 3);
-    this.scene.add(this.arbol6);
+    this.Background.add(this.arbol6);
 
     this.arbol7.scale.set(2, 3, 2);
     this.arbol7.position.set(-20, 18, 2);
-    this.scene.add(this.arbol7);
+    this.Background.add(this.arbol7);
 
     this.copo.scale.set(5, 5, 5);
     this.copo.position.set(-58, 25, 3);
-    this.scene.add(this.copo);
+    this.Background.add(this.copo);
 
     this.copo1.scale.set(5, 5, 5);
     this.copo1.position.set(68, 30, 2);
-    this.scene.add(this.copo1);
+    this.Background.add(this.copo1);
 
     this.copo2.scale.set(5, 5, 5);
     this.copo2.position.set(-10, 25, 2);
-    this.scene.add(this.copo2);
+    this.Background.add(this.copo2);
 
     this.copo3.scale.set(5, 5, 5);
     this.copo3.position.set(-25, 30, 2);
-    this.scene.add(this.copo3);
+    this.Background.add(this.copo3);
 
     this.copo4.scale.set(5, 5, 5);
     this.copo4.position.set(35, 25, 2);
-    this.scene.add(this.copo4);
+    this.Background.add(this.copo4);
 
     this.señal.scale.set(2, 2, 2);
     this.señal.position.set(-6, 11, 4);
-    this.scene.add(this.señal);
+    this.Background.add(this.señal);
 
     this.pino.scale.set(6, 6, 6);
     this.pino.position.set(-62, 78, -82);
-    this.scene.add(this.pino);
+    this.Background.add(this.pino);
 
     this.oso.scale.set(2, 2, 2);
     this.oso.position.set(-90, 55, -40);
-    this.scene.add(this.oso);
+    this.Background.add(this.oso);
 
     this.casa.scale.set(2, 2, 2);
     this.casa.position.set(7, 47, -54);
-    this.scene.add(this.casa);
+    this.Background.add(this.casa);
 
     this.arbol8.scale.set(4, 6, 4);
     this.arbol8.position.set(-105, 55, -40);
-    this.scene.add(this.arbol8);
+    this.Background.add(this.arbol8);
 
     this.muñeco3.scale.set(3, 3.5, 3);
     this.muñeco3.rotation.y = Math.PI;
     this.muñeco3.position.set(-14, 48, -37);
-    this.scene.add(this.muñeco3);
+    this.Background.add(this.muñeco3);
 
     this.pino1.scale.set(6, 6, 6);
     this.pino1.position.set(68, 24, -25);
-    this.scene.add(this.pino1);     
+    this.Background.add(this.pino1);     
     
     this.plano.scale.set(7, 7, 7);
     this.plano.position.set(0, -50.2, 0);
-    this.scene.add(this.plano);  
+    this.Background.add(this.plano);  
 
     this.pinoVerde.scale.set(2, 2, 2);
     this.pinoVerde.position.set(-72, 22, -20);
-    this.scene.add(this.pinoVerde);  
+    this.Background.add(this.pinoVerde);  
 
     this.pinoVerde1.scale.set(3, 4, 3);
     this.pinoVerde1.position.set(-16, 48, -48);
-    this.scene.add(this.pinoVerde1);  
+    this.Background.add(this.pinoVerde1);  
 
     this.pinoVerde2.scale.set(2, 2, 2);
     this.pinoVerde2.position.set(7, 27, -10);
-    this.scene.add(this.pinoVerde2); 
+    this.Background.add(this.pinoVerde2); 
     
     this.pinoVerde3.scale.set(3, 2, 3);
     this.pinoVerde3.position.set(110, 15, -20);
-    this.scene.add(this.pinoVerde3);  
+    this.Background.add(this.pinoVerde3);  
 
     this.pinoVerde4.scale.set(2, 2, 2);
     this.pinoVerde4.position.set(-23, 33, -16);
-    this.scene.add(this.pinoVerde4);  
+    this.Background.add(this.pinoVerde4);  
 
     this.cartel2.scale.set(9, 8, 9  );
     this.cartel2.position.set(-90, 30, -4);
-    this.scene.add(this.cartel2);
+    this.Background.add(this.cartel2);
 
     this.sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
-    this.sphere.position.set(this.jet.position.x, this.jet.position.y, this.jet.position.z);
+    this.sphere.position.set(this.player.object.position.x, this.player.object.position.y, this.player.object.position.z);
     this.sphere.geometry.computeBoundingSphere();
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
@@ -233,6 +233,8 @@ Game.onResourcesLoaded = function() {
 Game.init = function() {
 
     this.resetGravity();
+
+    this.timer = document.getElementById("timer");
 
     this.scene = new THREE.Scene();
 
@@ -272,7 +274,10 @@ Game.addLights = function() {
 }
 
 Game.loadResources = function() {
-    //FONDO  
+    
+    this.Background = new THREE.Group();
+    this.scene.add(this.Background);
+
     let texture_ft = new THREE.TextureLoader().load('assets/Nieve.png');        
     var bgMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(600, 400, 4, 0),
@@ -285,15 +290,9 @@ Game.loadResources = function() {
 
     bgMesh.receiveShadow = true;
     bgMesh.position.set(0, 30, -100)
-    this.scene.add(bgMesh);
+    this.Background.add(bgMesh);
 
     //CARGA DE MODELOS 
-    var jet = {
-        path: "assets/jet/",
-        obj: "jetski2.obj",
-        mtl: "jetski2.mtl",
-        mesh: null
-    };
 
     var platform = {
         path: "assets/Nieve/",
@@ -598,19 +597,6 @@ Game.loadResources = function() {
 		action.play();
 
         Game.player.object = object[0];
-    });
-
-    loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.rotation.x = THREE.Math.degToRad(-90);
-        object.rotation.z = THREE.Math.degToRad(-90);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.jet = object;
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
@@ -1251,11 +1237,15 @@ function onKeyUp(event) {
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
         if (keys["%"]) { // left arrow key
-            this.platformGroup.position.x += this.player.moveSpeed;
+            this.player.object.position.x -= this.player.moveSpeed;
+            this.camera.translateX(-this.player.moveSpeed);
+            this.Background.translateX(-this.player.moveSpeed);
         }
 
         if (keys["'"]) { // right arrow key
-            this.platformGroup.position.x -= this.player.moveSpeed;
+            this.player.object.position.x += this.player.moveSpeed;
+            this.camera.translateX(this.player.moveSpeed);
+            this.Background.translateX(this.player.moveSpeed);
         }
 
         var yaw = 0;
@@ -1274,17 +1264,17 @@ Game.updateKeyboard = function() {
 			Game.camera.position.y -= 10 * deltaTime;
 		}
         if (keys[" "]){
-			if(Game.canJump){
+			if(Game.player.canJump){
                 
-                Game.vy = 10;
-                Game.canJump = false; 
-                Game.collision = false;  
-                Game.isFalling = true;   
+                Game.player.vy = 10;
+                Game.player.canJump = false; 
+                Game.player.collision = false;  
+                Game.player.isFalling = true;   
 
             }
 		}
         if (!keys[" "]){		
-            Game.isJumping = false;
+            Game.player.isJumping = false;
 		}
 		
 		Game.camera.rotation.y += yaw * deltaTime;
@@ -1294,18 +1284,18 @@ Game.updateKeyboard = function() {
 
 Game.findCollision = function() {
 
-    var ind = Math.abs(Math.round(this.cy));
+    var ind = Math.abs(Math.round(this.player.cy));
 
     if (this.colliderArr[ind]) {
         for (var i = 0; i < this.colliderArr[ind].length; i++) {
 
-                this.jet.children[0].geometry.computeBoundingBox(); 
+                this.player.object.children[0].children[0].geometry.computeBoundingBox(); 
                 this.colliderArr[ind][i].geometry.computeBoundingBox();
-                this.jet.updateMatrixWorld();
+                this.player.object.updateMatrixWorld();
                 this.colliderArr[ind][i].updateMatrixWorld();
     
-                var box1 = this.jet.children[0].geometry.boundingBox.clone();
-                box1.applyMatrix4(this.jet.matrixWorld);
+                var box1 = this.player.object.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.player.object.matrixWorld);
     
                 var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
                 box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
@@ -1319,12 +1309,34 @@ Game.findCollision = function() {
 }
 
 Game.resetGravity = function  () {
-    this.cy = 0;   //currrent y position
     this.dt = 0.1; //delta time to make smooth movement
-    this.vy = 0;   //velocity
     this.mvy = 10;  //max velocity
     this.gravity = 0.2;
-    this.collision = false;
+}
+
+function timer() {
+
+    var num = Game.clock.getElapsedTime();
+    var minutos = Math.floor(num / 60);  
+    var segundos = Math.round(num % 60);
+
+    if(minutos < 10){
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: 0" + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: 0" + minutos + ":" + segundos;
+        }
+    }
+    else{
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: " + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: " + minutos + ":" + segundos;
+        }
+    }      
+
 }
 
 function update() {
@@ -1338,7 +1350,7 @@ function update() {
         deltaTime = Game.clock.getDelta();
         if ( mixer ) mixer.update( deltaTime );    
 
-        //timer();
+        timer();
 
         if (!Game.gameOver) {                                              
 
