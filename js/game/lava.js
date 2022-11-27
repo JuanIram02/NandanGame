@@ -15,7 +15,7 @@ Game.materials = {
 };
 
 //VARIABLES
-Game.MESH_VISIBILTY = true;
+Game.MESH_VISIBILTY = false;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
 Game.GAME_STARTED = false;

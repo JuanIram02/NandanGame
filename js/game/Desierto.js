@@ -188,7 +188,7 @@ Game.loadResources = function() {
 
 
     var pico = {
-        path: "assets/Nieve/picos",
+        path: "assets/Nieve/picos/",
         obj: "picos.obj",
         mtl: "picos.mtl",
         mesh: null
