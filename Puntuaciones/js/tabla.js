@@ -3,7 +3,7 @@ $(document).ready(function () {
     function getProducts() {
         var dataToSend = { action: "getProducts" };
         $.ajax({
-            url: "../../Juego/webservice/webservice.php",
+            url: "../Juego/webservice/webservice.php",
             async: true,
             type: 'POST',
             data: dataToSend,
@@ -12,7 +12,7 @@ $(document).ready(function () {
                
                 data.forEach(function (data) {
                   //var puntos = new puntos(data.p_nombre, data.p_puntuaciones);
-                  var fila = "<tr><td class='titulo' >" + data.p_nombre + "</td><td class='titulo'>" + data.p_puntuaciones;
+                  var fila = "<tr><td class='titulo' >" + data.p_nombre + "</td><td class='titulo'>" + data.p_stringpuntuacion + "</td><td class='titulo'>" + data.p_monedas;
                   console.log(data.p_nombre, data.p_puntuaciones);
                  
                   $('.ListaPuntuaciones').append(fila);

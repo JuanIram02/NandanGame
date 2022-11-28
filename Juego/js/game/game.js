@@ -76,7 +76,6 @@ Game.addLoader = function() {
         console.log("loaded all resources");
         !Game.GAME_LOADED && document.body.removeChild(progress);
         Game.GAME_LOADED = true;
-        Game.GAME_STARTED = true;
         Game.onResourcesLoaded();
     };
 }
@@ -261,6 +260,8 @@ Game.init = function() {
     this.again = document.getElementById("again");
     this.monedas = document.getElementById("monedas");
     this.contadorInvensibilidad = document.getElementById("invensible");
+    this.nombre = document.getElementById("nombre");
+    this.ingresar = document.getElementById("Ingresar");
 
     this.scene = new THREE.Scene();
 
@@ -1610,6 +1611,11 @@ function update() {
             Game.player.object.position.y, Game.player.object.position.z);
             Game.player.collision = Game.findCollision();
         }
+    }
+    else{
+        Game.ingresar.onClick = function() { 
+            Game.GAME_STARTED = true;
+        };  
     }
 }
 
