@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/tabla.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 canvas {
     border:1px solid #d3d3d3;
     background-color: #f1f1f1;
 }
+
+#tabla {
+        position: absolute;
+        width: 1200px;
+        height: 400px;
+        top: 100px;
+        left: 70px;      
+        border: 10px;
+        display: block;
+        background-color: burlywood;
+    }
 </style>
 </head>
+
 <body onload="startGame()">
+
+    <div id="tabla"> 
+        <table class="ListaPuntuaciones">
+            <thead>
+                <tr>
+                    <th class="titulo col-md-6" scope="col">Nombres</th>
+                    <th class="titulo col-md-6" scope="col">Puntaje</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+
+
 <script>
 
 var btnSalir;
