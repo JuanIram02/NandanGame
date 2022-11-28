@@ -17,9 +17,13 @@
     }
     #nombre {
         position: absolute;
-        top: 120px;
-        left: 300px;       
-        display: none;
+        width: 300px;
+        height: 190px;
+        top: 300px;
+        left: 800px;       
+        border: 10px;
+        display: block;
+        background-color: burlywood;
     }
     #loader {
         width: 200px;
@@ -86,6 +90,12 @@
     <p id="again">Press SPACE to play again</p>
     <p id="monedas">Monedas 0 / 10</p>
     <p id="invensible">Invulnerabilidad 5 segundos</p>
+    <div id="nombre">
+        <p style="font-size: xx-large">Ingrese su nombre:</p>
+        <input type="text">
+        <p><input type="button" value="Ingresar"></p>
+    </div>
+    
     <script src="js\game\lava.js" type="module"></script>
 </body>
 
