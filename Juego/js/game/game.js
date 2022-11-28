@@ -261,7 +261,7 @@ Game.init = function() {
     this.monedas = document.getElementById("monedas");
     this.contadorInvensibilidad = document.getElementById("invensible");
     this.nombre = document.getElementById("nombre");
-    this.ingresar = document.getElementById("Ingresar");
+    this.ingresar = document.getElementById("ingresar");
 
     this.scene = new THREE.Scene();
 
@@ -1361,7 +1361,8 @@ function onKeyUp(event) {
 }
 
 Game.updateKeyboard = function() {
-    if (!this.gameOver) {
+    if(this.GAME_STARTED){
+        if (!this.gameOver) {
         if (keys["A"]) { // left arrow key
             this.player.object.position.x -= this.player.moveSpeed;
             this.camera.translateX(-this.player.moveSpeed);
@@ -1401,6 +1402,8 @@ Game.updateKeyboard = function() {
     if(this.gamePause){
        
     }
+    }
+    
 }
 
 Game.restart = function () {
@@ -1512,7 +1515,7 @@ Game.findCollision = function() {
                             }
                         }    
                         
-                        savePuntos("Juan", string, num, this.player.monedas)
+                        savePuntos(this.player.nombre, string, num, this.player.monedas)
 
                         this.clock.stop();
                         Game.timer.innerHTML = "YOU WIN";
@@ -1613,7 +1616,9 @@ function update() {
         }
     }
     else{
-        Game.ingresar.onClick = function() { 
+        document.getElementById("ingresar").onclick = function() { 
+            Game.player.nombre = document.getElementById("textBox").value;
+            Game.nombre.style.display = "none"
             Game.GAME_STARTED = true;
         };  
     }
