@@ -4,7 +4,7 @@ import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
 
 var Game = Game || {};
-Game.player = { 
+Game.player = {
     collision: false,
     isFalling: false,
     canJump: false,
@@ -14,6 +14,19 @@ Game.player = {
     monedas: 0,
     invensible: false,
     fin: 0
+  
+};
+Game.player2 = {
+    collision: false,
+    isFalling: false,
+    canJump: false,
+    cy: 0,
+    vy: 0,
+    moveSpeed: 1,
+    monedas: 0,
+    invensible: false,
+    fin: 0
+  
 };
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
@@ -37,6 +50,7 @@ Game.gamePause = false;
 
 var deltaTime = 0;
 let mixer;
+let mixer2;
 var keys = {};
 
 var pauseArea = {
@@ -56,6 +70,33 @@ var pauseArea = {
     stop : function() {
         clearInterval(this.interval);
     }
+}
+
+var renderers = [];
+function createRenderer(color) {
+		
+    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+
+	var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setClearColor(color);
+    renderer.setPixelRatio((visibleSize.width / 2) / visibleSize.height);
+    renderer.setSize((visibleSize.width / 2), visibleSize.height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
+
+	renderers.push(renderer);
+}
+
+var cameras = [];
+function createCamera() {
+
+    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+
+	var camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 200);
+    camera.position.z = 80;
+    camera.position.y = 40;
+
+	cameras.push(camera);
 }
 
 Game.addLoader = function() {
@@ -236,6 +277,9 @@ Game.onResourcesLoaded = function() {
     this.cartel2.position.set(-90, 30, -4);
     this.Background.add(this.cartel2);
 
+    this.Background2 = this.Background.clone();
+    this.scene.add(this.Background2);
+
     this.sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
     this.sphere.position.set(this.player.object.position.x, this.player.object.position.y, this.player.object.position.z);
@@ -243,14 +287,28 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
+    this.sphere2 = new THREE.Mesh(
+        new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
+        this.sphere2.position.set(this.player2.object.position.x, this.player2.object.position.y, this.player2.object.position.z);
+        this.sphere2.geometry.computeBoundingSphere();
+        this.scene.add(this.sphere2);
+        this.sphere2.visible = this.MESH_VISIBILTY;
+    
+
     this.player.object.position.set(-15, 12, 20);
     this.player.object.scale.set(0.05, 0.05, 0.05);
     this.player.object.rotation.y = Math.PI / 2;
     this.scene.add(this.player.object);
 
+    this.player2.object.position.set(-15, 12, 20);
+    this.player2.object.scale.set(0.05, 0.05, 0.05);
+    this.player2.object.rotation.y = Math.PI / 2;
+    this.scene.add(this.player2.object);
+
     this.addPlatform();
 
     this.player.cy = this.player.object.position.y;
+    this.player2.cy = this.player2.object.position.y;
 }
 
 Game.init = function() {
@@ -262,22 +320,17 @@ Game.init = function() {
     this.monedas = document.getElementById("monedas");
     this.contadorInvensibilidad = document.getElementById("invensible");
 
-    this.scene = new THREE.Scene();
-
-    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
-    this.camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 200);
-	this.camera.position.z = 80;
-	this.camera.position.y = 40;
-
+    this.scene = new THREE.Scene();  
     this.clock = new THREE.Clock();	
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setPixelRatio(visibleSize.width / visibleSize.height);
-    this.renderer.setSize(visibleSize.width, visibleSize.height);
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
+    createCamera();
+    createCamera();
 
-    document.body.appendChild(this.renderer.domElement);
+    createRenderer(new THREE.Color(0, 0, 0));
+	createRenderer(new THREE.Color(0, 1, 0));
+
+    $("#scene-section-1").append(renderers[0].domElement);
+	$("#scene-section-2").append(renderers[1].domElement);
 
     document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);		
@@ -318,6 +371,7 @@ Game.loadResources = function() {
     bgMesh.receiveShadow = true;
     bgMesh.position.set(0, 30, -100)
     this.Background.add(bgMesh);
+    this.Background2 = this.Background.clone();
 
     this.sonido = cargarSonido("assets/Audio/moneda.mp3");
 
@@ -640,6 +694,16 @@ Game.loadResources = function() {
 		action.play();
 
         Game.player.object = object[0];
+    });
+
+    loadFBX(Player.path, Player.obj, Player.animationRun, (object) => {
+        mixer2 = new THREE.AnimationMixer( object[0] );
+        object[0].animations = object[1].animations;
+
+		const action = mixer2.clipAction( object[0].animations[ 0 ] );
+		action.play();
+
+        Game.player2.object = object[0];
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
@@ -1361,14 +1425,16 @@ function onKeyUp(event) {
 
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
+        ////////////                           PLAYER 1
         if (keys["A"]) { // left arrow key
             this.player.object.position.x -= this.player.moveSpeed;
-            this.camera.translateX(-this.player.moveSpeed);
+            cameras[0].translateX(-this.player.moveSpeed);
             this.Background.translateX(-this.player.moveSpeed);
         }
+
         if (keys["D"]) { // right arrow key
             this.player.object.position.x += this.player.moveSpeed;
-            this.camera.translateX(this.player.moveSpeed);
+            cameras[0].translateX(this.player.moveSpeed);
             this.Background.translateX(this.player.moveSpeed);
         }
         if (keys["W"]){
@@ -1385,11 +1451,31 @@ Game.updateKeyboard = function() {
             Game.player.isJumping = false;
 		}
 
-        if(keys["P"]){
-            pauseArea.canvas.style.display = "block"
-            this.clock.stop();
-            this.gamePause = true;
+         ////////////                           PLAYER 2
+         if (keys["J"]) { // left arrow key
+            this.player2.object.position.x -= this.player2.moveSpeed;
+            cameras[1].translateX(-this.player2.moveSpeed);
+            this.Background2.translateX(-this.player2.moveSpeed);
         }
+
+        if (keys["L"]) { // right arrow key
+            this.player2.object.position.x += this.player2.moveSpeed;
+            cameras[1].translateX(this.player2.moveSpeed);
+            this.Background2.translateX(this.player2.moveSpeed);
+        }
+        if (keys["I"]){
+			if(Game.player2.canJump){
+                
+                Game.player2.vy = 10;
+                Game.player2.canJump = false; 
+                Game.player2.collision = false;  
+                Game.player2.isFalling = true;   
+
+            }
+		}
+        if (!keys["I"]){		
+            Game.player2.isJumping = false;
+		}
 		
     }
     if(this.gameOver){
@@ -1398,7 +1484,11 @@ Game.updateKeyboard = function() {
 		}
     }
     if(this.gamePause){
-       
+        if(keys["P"]){
+            pauseArea.canvas.style.display = "block"
+            this.clock.stop();
+            this.gamePause = true;
+        }
     }
 }
 
@@ -1406,8 +1496,13 @@ Game.restart = function () {
   
     this.player.object.position.set(-15, 12, 20);
     this.player.monedas = 0;
-    this.camera.position.x = 0;
+    cameras[0].position.x = 0;
     this.Background.position.x = 0;
+
+    this.player2.object.position.set(-15, 12, 20);
+    this.player2.monedas = 0;
+    cameras[1].position.x = 0;
+    this.Background2.position.x = 0;
 
     this.clock = new THREE.Clock();	
     this.again.style.display = "none";
@@ -1489,6 +1584,60 @@ Game.findCollision = function() {
     return false;
 }
 
+Game.findCollision2 = function() {
+
+    var ind = Math.abs(Math.round(this.player2.cy));
+
+    if (this.colliderArr[ind]) {
+        for (var i = 0; i < this.colliderArr[ind].length; i++) {
+            if(this.colliderArr[ind][i].active == true){
+                this.player2.object.children[0].children[0].geometry.computeBoundingBox(); 
+                this.colliderArr[ind][i].geometry.computeBoundingBox();
+                this.player2.object.updateMatrixWorld();
+                this.colliderArr[ind][i].updateMatrixWorld();
+    
+                var box1 = this.player2.object.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.player2.object.matrixWorld);
+    
+                var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
+                box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
+                if (box1.intersectsBox(box2)) {
+                    if (this.colliderArr[ind][i].platformType === this.PICOS){
+                        if(!this.player2.invensible){
+                            this.gameOver = true;
+                        this.clock.stop();
+                        Game.timer.innerHTML = "GAME OVER";
+                        Game.again.style.display = "block"
+                        }                        
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.MONEDA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player2.monedas++;
+                        this.sonido.play();
+                        return false;
+
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.PILDORA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player2.invensible = true;
+                        this.contadorInvensibilidad.style.display = "block"
+                        this.player2.fin = Game.clock.getElapsedTime() + 5;
+                        return false;
+
+                    }
+                    return true;
+                }
+            }        
+        }
+    }
+
+    return false;
+}
+
 Game.resetGravity = function  () {
     this.dt = 0.1; //delta time to make smooth movement
     this.mvy = 10;  //max velocity
@@ -1524,12 +1673,24 @@ function update() {
     requestAnimationFrame(update);
 
     Game.updateKeyboard();
-    Game.renderer.render(Game.scene, Game.camera);
+
+    for (var i = 0; i < renderers.length; i++) {
+        if(i == 0){
+            Game.Background2.visible = false;
+            Game.Background.visible = true;
+        }
+        if(i == 1){
+            Game.Background2.visible = true;
+            Game.Background.visible = false;
+        }
+        renderers[i].render(Game.scene, cameras[i]);
+    }
 
     if (Game.GAME_STARTED) {
      
         deltaTime = Game.clock.getDelta();
         if ( mixer ) mixer.update( deltaTime );      
+        if ( mixer2 ) mixer2.update( deltaTime );      
 
         if (!Game.gameOver) {   
 
@@ -1570,6 +1731,29 @@ function update() {
             Game.sphere.position.set(Game.player.object.position.x, 
             Game.player.object.position.y, Game.player.object.position.z);
             Game.player.collision = Game.findCollision();
+
+            if (Game.player2.collision) { 
+                Game.player2.vy = 0;
+                Game.player2.canJump = true;
+                Game.player2.isFalling = false;
+            }        
+            else{
+                Game.player2.isFalling = true;
+            }    
+
+            if(Game.player2.isFalling) {       
+              
+                Game.player2.canJump = false;
+                if(Game.player2.vy <= Game.mvy && Game.player2.vy >= -Game.mvy)
+                    Game.player2.vy -= Game.gravity;      
+                               
+                Game.player2.cy += Game.player2.vy * Game.dt;
+                Game.player2.object.position.y = Game.player2.cy; 
+            }                                                                                                                     
+
+            Game.sphere.position.set(Game.player2.object.position.x, 
+            Game.player2.object.position.y, Game.player2.object.position.z);
+            Game.player2.collision = Game.findCollision2();
         }
     }
 }
@@ -1608,6 +1792,7 @@ function pause() {
     btnPlay = new component(80, 80, "assets/Pausa/btnplay.png", 700, 450, "btnc");
     const colPlay = new Path2D();
     colPlay.rect(700, 450, 80, 80);
+
 
     pauseArea.start();
     pauseArea.canvas.addEventListener('mousemove', function(event) {
