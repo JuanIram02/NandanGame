@@ -1,21 +1,26 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.module.js';
 import {MTLLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/MTLLoader.js';
 import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/OBJLoader.js';
-//import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
 
 var Game = Game || {};
 Game.player = { 
-    height: 2, 
-    speed: 0.1, 
-    turnSpeed: Math.PI * 0.02, 
-    moveSpeed: 1
+    collision: false,
+    isFalling: false,
+    canJump: false,
+    cy: 0,
+    vy: 0,
+    moveSpeed: 1,
+    monedas: 0,
+    invensible: false,
+    fin: 0
 };
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
 };
 
 //VARIABLES
-Game.MESH_VISIBILTY = true;
+Game.MESH_VISIBILTY = false;
 Game.USE_WIREFRAME = false;
 Game.GAME_LOADED = false;
 Game.GAME_STARTED = false;
@@ -24,12 +29,14 @@ Game.GREEN_PIECE = 11;
 Game.PICOS = 12;
 Game.ROCA = 13;
 Game.TORRE = 14;
+Game.MONEDA = 15;
+Game.PILDORA = 16;
 
-Game.cameraY = -0.5;
 Game.gameOver = false;
-Game.score = 0;
 
-var deltaTime;
+
+var deltaTime = 0;
+let mixer;
 var keys = {};
 
 Game.addLoader = function() {
@@ -57,34 +64,41 @@ Game.addLoader = function() {
     
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
-    this.jet.scale.set(1, 1, 1);
-    this.jet.position.set(-10, 30, 20);
-    this.scene.add(this.jet);
 
-    this.mountain.scale.set(12, 15, 12);
-    this.mountain.position.set(0, 0, -108);
-    this.mountain.rotation.y = 90; 
-    this.scene.add(this.mountain);
+    this.mountain.scale.set(52, 150, 115);
+    this.mountain.position.set(0, 5, -10);
+    this.mountain.rotation.y = 30; 
+    this.Background.add(this.mountain);
 
     this.plano.scale.set(7, 7, 7);
     this.plano.position.set(0, -51.5, 0);
-    this.scene.add(this.plano);  
+    this.Background.add(this.plano);  
 
     this.sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
-    this.sphere.position.set(this.jet.position.x, this.jet.position.y, this.jet.position.z);
-    this.sphere.geometry.computeBoundingSphere();
-    this.scene.add(this.sphere);
-    this.sphere.visible = this.MESH_VISIBILTY;
-
-    this.addPlatform();
-
-    this.cy = this.jet.position.y;
+        new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
+        this.sphere.position.set(this.player.object.position.x, this.player.object.position.y, this.player.object.position.z);
+        this.sphere.geometry.computeBoundingSphere();
+        this.scene.add(this.sphere);
+        this.sphere.visible = this.MESH_VISIBILTY;
+    
+        this.player.object.position.set(-15, 12, 20);
+        this.player.object.scale.set(0.05, 0.05, 0.05);
+        this.player.object.rotation.y = Math.PI / 2;
+        this.scene.add(this.player.object);
+    
+        this.addPlatform();
+    
+        this.player.cy = this.player.object.position.y;
 }
 
 Game.init = function() {
 
     this.resetGravity();
+
+    this.timer = document.getElementById("timer");
+    this.again = document.getElementById("again");
+    this.monedas = document.getElementById("monedas");
+    this.contadorInvensibilidad = document.getElementById("invensible");
 
     this.scene = new THREE.Scene();
 
@@ -124,6 +138,10 @@ Game.addLights = function() {
 }
 
 Game.loadResources = function() {
+
+    this.Background = new THREE.Group();
+    this.scene.add(this.Background);
+
     //FONDO  
     let texture_ft = new THREE.TextureLoader().load('assets/volcan.jpg');        
     var bgMesh = new THREE.Mesh(
@@ -137,15 +155,23 @@ Game.loadResources = function() {
 
     bgMesh.receiveShadow = true;
     bgMesh.position.set(0, 30, -118)
-    this.scene.add(bgMesh);
+    this.Background.add(bgMesh);
 
     //CARGA DE MODELOS 
-    var jet = {
-        path: "assets/jet/",
-        obj: "jetski2.obj",
-        mtl: "jetski2.mtl",
+
+    var moneda = {
+        path: "assets/Items/Moneda/",
+        obj: "moneda.obj",
+        mtl: "moneda.mtl",
         mesh: null
-    };
+    }
+
+    var pildora = {
+        path: "assets/Items/Pildora/",
+        obj: "pildora.obj",
+        mtl: "pildora.mtl",
+        mesh: null
+    }
 
     var platform = {
         path: "assets/Lava/",
@@ -188,19 +214,20 @@ Game.loadResources = function() {
         mtl: "Plano.mtl",
         mesh: null
     }
+    var Player = {
+        path: "assets/Personajes/",
+        obj: "Jugador.fbx",
+        animationRun: "Animations/Fast Run.fbx",
+    }
     //Carga de Modelos
+    loadFBX(Player.path, Player.obj, Player.animationRun, (object) => {
+        mixer = new THREE.AnimationMixer( object[0] );
+        object[0].animations = object[1].animations;
 
-    loadOBJWithMTL(jet.path, jet.obj, jet.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.rotation.x = THREE.Math.degToRad(-90);
-        object.rotation.z = THREE.Math.degToRad(-90);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.jet = object;
+		const action = mixer.clipAction( object[0].animations[ 0 ] );
+		action.play();
+
+        Game.player.object = object[0];
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
@@ -253,6 +280,29 @@ Game.loadResources = function() {
         Game.pico = object;
     });
 
+    loadOBJWithMTL(moneda.path, moneda.obj, moneda.mtl, (object) => {
+        object.scale.set(3, 3, 3);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.moneda = object;
+    });
+
+    loadOBJWithMTL(pildora.path, pildora.obj, pildora.mtl, (object) => {
+        object.scale.set(3, 3, 3);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.pildora = object;
+    });
+
+
     loadOBJWithMTL(roca.path, roca.obj, roca.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.scale.set(6, 6, 6);
@@ -304,7 +354,9 @@ Game.addPlatform = function() {
         { type: this.RED_PIECE },
         { type: this.PICOS },
         { type: this.ROCAS },
-        { type: this.TORRE }
+        { type: this.TORRE },
+        { type: this.MONEDA },
+        { type: this.PILDORA }
 
     ];
 
@@ -312,7 +364,7 @@ Game.addPlatform = function() {
     var separationValue = 19;
     var plIndex = -1;
 
-    var levelCount = 3; var collider = [];
+    var levelCount = 4; var collider = [];
     var platGroupArr = [];
     var colliderGroupArr = [];
     var platformPiece;
@@ -322,21 +374,27 @@ Game.addPlatform = function() {
             count: 72,
             separation: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
                          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                          40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  50, 51, 52, 53, 54, 55,  56, 57, 58, 59, 60, 61, 62,
-                          63, 64, 65, 66, 67, 68],
+                          40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
+                          63, 64, 65, 66, 67],
             type: [1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 
                     1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 4]
         },
         {
-            count: 15,
-            separation: [-2, -1, 2, 3, 15, 19, 22, 23, 29, 34, 39, 46, 47, 53, 54, 56],
-            type: [0, 0, 0, 0, 3, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3]
+            count: 20,
+            separation: [-2, -1, 2, 3, 7, 15, 17, 19, 22, 23, 26, 29, 34, 39, 46, 47, 53, 54, 55, 56],
+            type: [0, 0, 0, 0, 5, 3, 5, 3, 0, 0, 5, 3, 0, 0, 0, 0, 0, 0, 5, 3]
         },
         {
-            count: 14,
-            separation: [6, 7, 8, 11, 12, 17, 26, 36, 37, 41, 42, 50, 51, 58],
-            type: [0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 3, 3, 3, 0]
+            count: 17,
+            separation: [0, 6, 7, 8, 11, 12, 17, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
+            type: [5, 0, 0, 0, 0, 0, 3, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
         },
+        {
+            count: 4,
+            separation: [12, 37, 43, 65],
+            type: [5, 6, 5, 5]
+        },
+        //pildora 37;
     ];
     
     for (var a = 0; a < levelCount; a++) {
@@ -356,17 +414,17 @@ Game.addPlatform = function() {
             //diferentes tipos de plataforma, ahorita solo hay box
             if (platformPieceType[type[i]].type === this.RED_PIECE) {//this.RED_PIECE es lo que hay que modificar para que poner mas tipos
                 platformPiece = this.platformGround.clone();
-                platformPiece.position.set(0, 0, 20);
+                platformPiece.position.set(0, .5, 20);
             }
                 
             if (platformPieceType[type[i]].type === this.GREEN_PIECE){
                 platformPiece = this.platformFlying.clone();
-                platformPiece.position.set(0, 6.5, 20);
+                platformPiece.position.set(0, 6, 20);
             }
 
             if (platformPieceType[type[i]].type === this.PICOS){
                 platformPiece = this.pico.clone();
-                platformPiece.position.set(0, -4, 25);
+                platformPiece.position.set(0, -4, 20);
             }
 
             if (platformPieceType[type[i]].type === this.ROCAS){
@@ -379,17 +437,59 @@ Game.addPlatform = function() {
                 platformPiece.position.set(0, 7.5, 13);
             }
 
+            if (platformPieceType[type[i]].type === this.MONEDA){
+                platformPiece = this.moneda.clone();
+                platformPiece.position.set(0, 12, 20);
+            }
+
+            if (platformPieceType[type[i]].type === this.PILDORA){
+                platformPiece = this.pildora.clone();
+                platformPiece.position.set(0, 12, 20);
+            }
+
 
             collider = [];
 
-            collider.push(new THREE.Mesh(new THREE.BoxGeometry(19, 10, 1),
+            if (platformPieceType[type[i]].type === this.ROCAS){
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(12, 10, 1),
              this.materials.solid));
+            collider[0].active = true;
+            collider[0].position.set(0, 10, 20);
+            collider[0].rotation.x += Math.PI / 2;
+            collider[0].receiveShadow = true;
+            collider[0].visible = this.MESH_VISIBILTY;
+            collider[0].platformType = platformPieceType[type[i]].type;
+            }
+            if (platformPieceType[type[i]].type === this.MONEDA){
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(9, 10, 5),
+             this.materials.solid));
+            collider[0].active = true;
+            collider[0].position.set(0, 10, 20);
+            collider[0].rotation.x += Math.PI / 2;
+            collider[0].receiveShadow = true;
+            collider[0].visible = this.MESH_VISIBILTY;
+            collider[0].platformType = platformPieceType[type[i]].type;
+            }
+            if (platformPieceType[type[i]].type === this.PILDORA){
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(9, 10, 5),
+             this.materials.solid));
+            collider[0].active = true;
+            collider[0].position.set(0, 10, 20);
+            collider[0].rotation.x += Math.PI / 2;
+            collider[0].receiveShadow = true;
+            collider[0].visible = this.MESH_VISIBILTY;
+            collider[0].platformType = platformPieceType[type[i]].type;
+            }
+            else{
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(19, 10, 1),
+             this.materials.solid));
+            collider[0].active = true;
             collider[0].position.set(0, 10, 20);
             collider[0].rotation.x += Math.PI / 2;
             collider[0].receiveShadow = true;
             collider[0].visible = this.MESH_VISIBILTY;
             collider[0].platformType = platformPieceType[type[i]].type; //aqui le ponemos collider diferentes dependiendo de el tipo de pieza
-
+            }          
 
             var platGroup = new THREE.Group();
             platGroup.add(platformPiece);
@@ -424,6 +524,28 @@ function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
     });
 }
 
+function loadFBX(path, obj, animacion, onLoadCallback) {
+
+    var player = [];
+    const loader = new FBXLoader(Game.loadingManager);
+    loader.setPath(path);
+    loader.load(obj, function ( object ) {				
+        object.traverse( function ( child ) {
+            if ( child.isMesh ) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        player.push(object);
+    } );
+
+    loader.load( animacion, function ( object ) {	
+        player.push(object);
+        onLoadCallback(player);
+    });       
+    
+}
+
 function onKeyDown(event) {
     keys[String.fromCharCode(event.keyCode)] = true;
 }
@@ -434,11 +556,15 @@ function onKeyUp(event) {
 Game.updateKeyboard = function() {
     if (!this.gameOver) {
         if (keys["%"]) { // left arrow key
-            this.platformGroup.position.x += this.player.moveSpeed;
+            this.player.object.position.x -= this.player.moveSpeed;
+            this.camera.translateX(-this.player.moveSpeed);
+            this.Background.translateX(-this.player.moveSpeed);
         }
 
         if (keys["'"]) { // right arrow key
-            this.platformGroup.position.x -= this.player.moveSpeed;
+            this.player.object.position.x += this.player.moveSpeed;
+            this.camera.translateX(this.player.moveSpeed);
+            this.Background.translateX(this.player.moveSpeed);
         }
 
         var yaw = 0;
@@ -457,44 +583,110 @@ Game.updateKeyboard = function() {
 			Game.camera.position.y -= 10 * deltaTime;
 		}
         if (keys[" "]){
-			if(Game.canJump){
+			if(Game.player.canJump){
                 
-                Game.vy = 10;
-                Game.canJump = false; 
-                Game.collision = false;  
-                Game.isFalling = true;   
+                Game.player.vy = 10;
+                Game.player.canJump = false; 
+                Game.player.collision = false;  
+                Game.player.isFalling = true;   
 
             }
 		}
         if (!keys[" "]){		
-            Game.isJumping = false;
+            Game.player.isJumping = false;
 		}
 		
 		Game.camera.rotation.y += yaw * deltaTime;
 		Game.camera.translateZ(forward * deltaTime);
     }
+    else{
+        if (keys[" "]){		
+            Game.restart();
+		}
+    }
+}
+
+Game.restart = function () {
+  
+    this.player.object.position.set(-15, 12, 20);
+    this.player.monedas = 0;
+    this.camera.position.x = 0;
+    this.Background.position.x = 0;
+
+    this.clock = new THREE.Clock();	
+    this.again.style.display = "none";
+
+    for(var y = 0; y < this.colliderArr.length; y++){
+         if (this.colliderArr[y]) {
+            for (var i = 0; i < this.colliderArr[y].length; i++) {
+                if (this.colliderArr[y][i].platformType === this.MONEDA){
+                        
+                    this.colliderArr[y][i].active = true;
+                    this.platformArr[y][i].visible = true;
+
+                }
+                if (this.colliderArr[y][i].platformType === this.PILDORA){
+                    
+                    this.colliderArr[y][i].active = true;
+                    this.platformArr[y][i].visible = true;
+
+                }
+            }
+        }
+    }
+   
+
+    this.gameOver = false;
+
 }
 
 Game.findCollision = function() {
 
-    var ind = Math.abs(Math.round(this.cy));
+    var ind = Math.abs(Math.round(this.player.cy));
 
     if (this.colliderArr[ind]) {
         for (var i = 0; i < this.colliderArr[ind].length; i++) {
-
-                this.jet.children[0].geometry.computeBoundingBox(); 
+            if(this.colliderArr[ind][i].active == true){
+                this.player.object.children[0].children[0].geometry.computeBoundingBox(); 
                 this.colliderArr[ind][i].geometry.computeBoundingBox();
-                this.jet.updateMatrixWorld();
+                this.player.object.updateMatrixWorld();
                 this.colliderArr[ind][i].updateMatrixWorld();
     
-                var box1 = this.jet.children[0].geometry.boundingBox.clone();
-                box1.applyMatrix4(this.jet.matrixWorld);
+                var box1 = this.player.object.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.player.object.matrixWorld);
     
                 var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
                 box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
                 if (box1.intersectsBox(box2)) {
+                    if (this.colliderArr[ind][i].platformType === this.PICOS){
+                        if(!this.player.invensible){
+                            this.gameOver = true;
+                        this.clock.stop();
+                        Game.timer.innerHTML = "GAME OVER";
+                        Game.again.style.display = "block"
+                        }                        
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.MONEDA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player.monedas++;
+                        return false;
+
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.PILDORA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player.invensible = true;
+                        this.contadorInvensibilidad.style.display = "block"
+                        this.player.fin = Game.clock.getElapsedTime() + 5;
+                        return false;
+
+                    }
                     return true;
                 }
+            }        
         }
     }
 
@@ -502,47 +694,86 @@ Game.findCollision = function() {
 }
 
 Game.resetGravity = function  () {
-    this.cy = 0;   //currrent y position
     this.dt = 0.1; //delta time to make smooth movement
-    this.vy = 0;   //velocity
     this.mvy = 10;  //max velocity
     this.gravity = 0.2;
-    this.collision = false;
+}
+
+function timer() {
+
+    var num = Game.clock.getElapsedTime();
+    var minutos = Math.floor(num / 60);  
+    var segundos = Math.round(num % 60);
+
+    if(minutos < 10){
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: 0" + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: 0" + minutos + ":" + segundos;
+        }
+    }
+    else{
+        if(segundos < 10){
+            Game.timer.innerHTML = "Time: " + minutos + ":0" + segundos;
+        }
+        else{
+            Game.timer.innerHTML = "Time: " + minutos + ":" + segundos;
+        }
+    }      
+
 }
 
 function update() {
     requestAnimationFrame(update);
 
-    deltaTime = Game.clock.getDelta();
-
     Game.updateKeyboard();
     Game.renderer.render(Game.scene, Game.camera);
 
     if (Game.GAME_STARTED) {
-        if (!Game.gameOver) {                                              
+     
+        deltaTime = Game.clock.getDelta();
+        if ( mixer ) mixer.update( deltaTime );      
 
-            if (Game.collision) { // ball is on surface
-                Game.vy = 0;
-                Game.canJump = true;
-                Game.isFalling = false;
+        if (!Game.gameOver) {   
+
+            timer();
+
+            Game.monedas.innerHTML = "Monedas " + Game.player.monedas + " / 10";
+
+            if(Game.player.invensible){               
+                var segundos = Math.round(Game.player.fin - Game.clock.getElapsedTime());
+                Game.contadorInvensibilidad.innerHTML = "Invulnerabilidad " + segundos + " segundos";
+                if(segundos <= 0){
+                    Game.player.invensible = false;
+                    Game.contadorInvensibilidad.style.display = "none";
+                }
+            }
+
+            Game.moneda.rotation.y += 2 * deltaTime;
+
+            if (Game.player.collision) { 
+                Game.player.vy = 0;
+                Game.player.canJump = true;
+                Game.player.isFalling = false;
             }        
             else{
-                Game.isFalling = true;
+                Game.player.isFalling = true;
             }    
 
-            if(Game.isFalling) {       
+            if(Game.player.isFalling) {       
               
-                Game.canJump = false;
-                if(Game.vy <= Game.mvy && Game.vy >= -Game.mvy)
-                    Game.vy -= Game.gravity;      
+                Game.player.canJump = false;
+                if(Game.player.vy <= Game.mvy && Game.player.vy >= -Game.mvy)
+                    Game.player.vy -= Game.gravity;      
                                
-                Game.cy += Game.vy * Game.dt;
-                Game.jet.position.y = Game.cy; 
+                Game.player.cy += Game.player.vy * Game.dt;
+                Game.player.object.position.y = Game.player.cy; 
             }                                                                                                                     
 
-            Game.sphere.position.set(Game.jet.position.x, 
-            Game.jet.position.y, Game.jet.position.z);
-            Game.collision = Game.findCollision();
+            Game.sphere.position.set(Game.player.object.position.x, 
+            Game.player.object.position.y, Game.player.object.position.z);
+            Game.player.collision = Game.findCollision();
         }
     }
 }
