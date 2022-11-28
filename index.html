@@ -31,15 +31,37 @@
         font-weight: bold;
         position: absolute;
         font-size: xx-large;
-        left: 1000px;
+        left: 1200px;
     }
+
+    #monedas {
+        width: auto;
+        height: 25px;
+        font-weight: bold;
+        position: absolute;
+        font-size: xx-large;
+        left: 500px;
+        top: -40;
+    }
+
     #again {
         width: auto;
         height: 25px;
         font-weight: bold;
         position: absolute;
         font-size: xx-large;
-        left: 910px;
+        left: 1100px;
+        top: 60px;
+        display: none;
+    }
+
+    #invensible {
+        width: auto;
+        height: 25px;
+        font-weight: bold;
+        position: absolute;
+        font-size: xx-large;
+        left: 810px;
         top: 60px;
         display: none;
     }
@@ -47,8 +69,11 @@
     
 
 <body style="text-align:center;">
-    <p id="timer">Time: 0:00</p>
+    
+    <p id="timer">Time: 0:00</p> 
     <p id="again">Press SPACE to play again</p>
+    <p id="monedas">Monedas 0 / 10</p>
+    <p id="invensible">Invulnerabilidad 5 segundos</p>
     <script src="js\game\game.js" type="module"></script>
 </body>
 
