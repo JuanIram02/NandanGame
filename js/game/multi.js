@@ -327,7 +327,7 @@ Game.init = function() {
     createCamera();
 
     createRenderer(new THREE.Color(0, 0, 0));
-	createRenderer(new THREE.Color(0, 1, 0));
+	createRenderer(new THREE.Color(0, 0, 0));
 
     $("#scene-section-1").append(renderers[0].domElement);
 	$("#scene-section-2").append(renderers[1].domElement);
@@ -1496,10 +1496,12 @@ Game.restart = function () {
   
     this.player.object.position.set(-15, 12, 20);
     this.player.monedas = 0;
+    this.player.cy = 12;
     cameras[0].position.x = 0;
     this.Background.position.x = 0;
 
     this.player2.object.position.set(-15, 12, 20);
+    this.player2.cy = 12;
     this.player2.monedas = 0;
     cameras[1].position.x = 0;
     this.Background2.position.x = 0;

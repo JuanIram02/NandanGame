@@ -1167,13 +1167,13 @@ Game.addPlatform = function() {
 
     var randomPlatform = [
         {
-            count: 72,
+            count: 73,
             separation: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
                          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
-                          63, 64, 65, 66, 67],
+                          63, 64, 65, 66, 67, 67],
             type: [1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 
-                    1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 4]
+                    1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 4, 1]
         },
         {
             count: 20,
@@ -1187,7 +1187,7 @@ Game.addPlatform = function() {
         },
         {
             count: 4,
-            separation: [12, 37, 43, 65],
+            separation: [12, 37, 43, 62],
             type: [5, 6, 5, 5]
         },
         //pildora 37;
@@ -1480,6 +1480,45 @@ Game.findCollision = function() {
                         return false;
 
                     }
+                    if (this.colliderArr[ind][i].platformType === this.TORRE){
+                        
+                        this.gameOver = true;
+
+                        var num = Game.clock.getElapsedTime();                       
+                        var minutos = Math.floor(num / 60);  
+                        var segundos = Math.round(num % 60);
+
+                        var string = "";
+
+                        if(minutos < 10){
+                            if(segundos < 10){
+                                Game.again.innerHTML = "Your time: 0" + minutos + ":0" + segundos;
+                                string = "0" + minutos + ":0" + segundos;
+                            }
+                            else{
+                                Game.again.innerHTML = "Your time: 0" + minutos + ":" + segundos;
+                                string = "0" + minutos + ":" + segundos;
+                            }
+                        }
+                        else{
+                            if(segundos < 10){
+                                Game.again.innerHTML = "Your time: " + minutos + ":0" + segundos;
+                                string = minutos + ":0" + segundos;
+                            }
+                            else{
+                                Game.again.innerHTML = "Your time: " + minutos + ":" + segundos;
+                                string = minutos + ":" + segundos;
+                            }
+                        }    
+                        
+                        savePuntos("Juan", string, num, this.player.monedas)
+
+                        this.clock.stop();
+                        Game.timer.innerHTML = "YOU WIN";
+                        Game.again.style.display = "block"
+                        return false;
+
+                    }
                     return true;
                 }
             }        
@@ -1755,4 +1794,32 @@ function updateGameArea() {
     btnPause.update();
     btnPlay.newPos();
     btnPlay.update();
+}
+
+function savePuntos(nombre, string, tiempo, monedas) {
+
+    var dataToSend = {
+        action: "Agregar1",
+        nombre: nombre,
+        string: string,
+        tiempo: tiempo,
+        monedas: monedas
+    };
+
+    var objetoEnJSON = JSON.stringify(dataToSend);
+    var objetoDesdeJSON = JSON.parse(objetoEnJSON);
+
+    $.ajax({
+        url: "webservice/webservice.php",
+        async: true,
+        type: 'POST',
+        data: dataToSend,
+        success: function (data) {
+            alert(data);
+        },
+        error: function (x, y, z) {
+            alert("Error en webservice: " + x + y + z);
+        }
+        //..
+    });
 }
