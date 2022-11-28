@@ -64,12 +64,12 @@ function connect(){
 
         $mysqli = connect();
         
-        $result = $mysqli->query("INSERT INTO puntuaciones(p_nombre, p_stringpuntuacion) values('".$nombre."', ".$string", ".$tiempo", ".$monedas.")");
+        $result = $mysqli->query("INSERT INTO puntuaciones(p_nombre, p_stringpuntuacion, p_puntuacion, p_monedas) values( '".$nombre."', '".$string."', ".$tiempo.", ".$monedas." )");
         
         if (!$result) {
             echo "Problema al hacer un query: " . $mysqli->error;								
         } else {
-            echo "Todo salio bien";		
+            //echo "Todo salio bien";		
         }
         //$result->free();
         //disconnect();
