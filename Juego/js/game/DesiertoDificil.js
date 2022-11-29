@@ -149,6 +149,8 @@ Game.init = function() {
     this.again = document.getElementById("again");
     this.monedas = document.getElementById("monedas");
     this.contadorInvensibilidad = document.getElementById("invensible");
+    this.nombre = document.getElementById("nombre");
+    this.ingresar = document.getElementById("ingresar");
 
     this.scene = new THREE.Scene();
 
@@ -544,7 +546,7 @@ Game.addPlatform = function() {
     var colliderGroupArr = [];
     var platformPiece;
 
-  var randomPlatform = [
+    var randomPlatform = [
         {
             count: 73,
             separation: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
@@ -739,7 +741,8 @@ function onKeyUp(event) {
 }
 
 Game.updateKeyboard = function() {
-    if (!this.gameOver) {
+       if(this.GAME_STARTED){
+        if (!this.gameOver) {
         if (keys["A"]) { // left arrow key
             this.player.object.position.x -= this.player.moveSpeed;
             this.camera.translateX(-this.player.moveSpeed);
@@ -769,6 +772,7 @@ Game.updateKeyboard = function() {
             this.clock.stop();
             this.gamePause = true;
         }
+    }
 		
     }
     if(this.gameOver){
@@ -890,7 +894,7 @@ Game.findCollision = function() {
                             }
                         }    
                         
-                        savePuntos("Juan", string, num, this.player.monedas)
+                        savePuntos(this.player.nombre, string, num, this.player.monedas)
 
                         this.clock.stop();
                         Game.timer.innerHTML = "YOU WIN";
@@ -990,6 +994,13 @@ function update() {
             Game.player.collision = Game.findCollision();
         }
     }
+    else{
+        document.getElementById("ingresar").onclick = function() { 
+            Game.player.nombre = document.getElementById("textBox").value;
+            Game.nombre.style.display = "none"
+            Game.GAME_STARTED = true;
+        };  
+}
 }
 
 window.onload = function() {
