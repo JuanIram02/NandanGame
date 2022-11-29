@@ -4,7 +4,7 @@ import {OBJLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js';
 
 var Game = Game || {};
-Game.player = { 
+Game.player = {
     collision: false,
     isFalling: false,
     canJump: false,
@@ -14,6 +14,19 @@ Game.player = {
     monedas: 0,
     invensible: false,
     fin: 0
+  
+};
+Game.player2 = {
+    collision: false,
+    isFalling: false,
+    canJump: false,
+    cy: 0,
+    vy: 0,
+    moveSpeed: 1,
+    monedas: 0,
+    invensible: false,
+    fin: 0
+  
 };
 Game.materials = {
     solid: new THREE.MeshNormalMaterial({})
@@ -37,6 +50,7 @@ Game.gamePause = false;
 
 var deltaTime = 0;
 let mixer;
+let mixer2;
 var keys = {};
 
 var pauseArea = {
@@ -58,6 +72,33 @@ var pauseArea = {
     }
 }
 
+var renderers = [];
+function createRenderer(color) {
+		
+    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+
+	var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setClearColor(color);
+    renderer.setPixelRatio((visibleSize.width / 2) / visibleSize.height);
+    renderer.setSize((visibleSize.width / 2), visibleSize.height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
+
+	renderers.push(renderer);
+}
+
+var cameras = [];
+function createCamera() {
+
+    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+
+	var camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 200);
+    camera.position.z = 80;
+    camera.position.y = 40;
+
+	cameras.push(camera);
+}
+
 Game.addLoader = function() {
 
     var progress = document.createElement('div');
@@ -75,7 +116,7 @@ Game.addLoader = function() {
     this.loadingManager.onLoad = function() {
         console.log("loaded all resources");
         !Game.GAME_LOADED && document.body.removeChild(progress);
-        Game.GAME_LOADED = true;
+        Game.GAME_LOADED = true;        
         Game.onResourcesLoaded();
     };
 }
@@ -83,157 +124,17 @@ Game.addLoader = function() {
 //EDICION DE MODELOS
 Game.onResourcesLoaded = function() {
 
-    this.muñeco.scale.set(5.5, 5.5, 5.5);
-    this.muñeco.rotation.y = Math.PI;
-    this.muñeco.position.set(10, 9, -2);
-    this.Background.add(this.muñeco);
-
-    this.arbol1.scale.set(8, 10, 8);
-    this.arbol1.position.set(-50, 14, -4);
-    this.Background.add(this.arbol1);
-
-    this.arbol2.scale.set(7, 9, 7);
-    this.arbol2.position.set(50, 11, -6);
-    this.Background.add(this.arbol2);
-
-    this.arbol3.scale.set(5, 7, 7);
-    this.arbol3.position.set(-75, 12, -4);
-    this.Background.add(this.arbol3);
-
-    this.mountain.scale.set(7, 10, 7);
-    this.mountain.position.set(0, 7, -67);
+    this.mountain.scale.set(52, 150, 115);
+    this.mountain.position.set(0, 5, -10);
+    this.mountain.rotation.y = 30; 
     this.Background.add(this.mountain);
 
-    this.arbol4.scale.set(6, 8, 6);
-    this.arbol4.position.set(25, 22, -3);
-    this.Background.add(this.arbol4);
-
-    this.arbol5.scale.set(3, 5, 3);
-    this.arbol5.position.set(-5, 20, -3);
-    this.Background.add(this.arbol5);
-
-    this.cartel.scale.set(8, 8, 8);
-    this.cartel.position.set(-18, 20, -3);
-    this.Background.add(this.cartel);
-
-    this.rama.scale.set(5, 5, 5);
-    this.rama.position.set(-18.5, 21.6, -3);
-    this.Background.add(this.rama);
-
-    this.nieve.scale.set(5, 5, 5);
-    this.nieve.position.set(-18, 20, -5);
-    this.Background.add(this.nieve);
-
-    this.rama1.scale.set(3, 3, 3);
-    this.rama1.position.set(-15, 21.6, -3);
-    this.Background.add(this.rama1);
-
-    this.muñeco1.scale.set(3.5, 3.5, 3.5);
-    this.muñeco1.rotation.y = Math.PI;
-    this.muñeco1.position.set(-30, 21, -3);
-    this.Background.add(this.muñeco1);
-
-    this.muñeco2.scale.set(3, 3.5, 3);
-    this.muñeco2.rotation.y = Math.PI;
-    this.muñeco2.position.set(80, 18, -3);
-    this.Background.add(this.muñeco2);
-
-    this.nieve1.scale.set(5, 5, 5);
-    this.nieve1.position.set(79, 18, -3);
-    this.Background.add(this.nieve1);
-
-    this.rama2.scale.set(4, 3, 4);
-    this.rama2.position.set(84, 19, -2);
-    this.Background.add(this.rama2);
-
-    this.rama3.scale.set(4, 4, 4);
-    this.rama3.position.set(76, 20, -1);
-    this.Background.add(this.rama3);
-
-    this.arbol6.scale.set(3, 5, 3);
-    this.arbol6.position.set(86, 15, 3);
-    this.Background.add(this.arbol6);
-
-    this.arbol7.scale.set(2, 3, 2);
-    this.arbol7.position.set(-20, 18, 2);
-    this.Background.add(this.arbol7);
-
-    this.copo.scale.set(5, 5, 5);
-    this.copo.position.set(-58, 25, 3);
-    this.Background.add(this.copo);
-
-    this.copo1.scale.set(5, 5, 5);
-    this.copo1.position.set(68, 30, 2);
-    this.Background.add(this.copo1);
-
-    this.copo2.scale.set(5, 5, 5);
-    this.copo2.position.set(-10, 25, 2);
-    this.Background.add(this.copo2);
-
-    this.copo3.scale.set(5, 5, 5);
-    this.copo3.position.set(-25, 30, 2);
-    this.Background.add(this.copo3);
-
-    this.copo4.scale.set(5, 5, 5);
-    this.copo4.position.set(35, 25, 2);
-    this.Background.add(this.copo4);
-
-    this.señal.scale.set(2, 2, 2);
-    this.señal.position.set(-6, 11, 4);
-    this.Background.add(this.señal);
-
-    this.pino.scale.set(6, 6, 6);
-    this.pino.position.set(-62, 78, -82);
-    this.Background.add(this.pino);
-
-    this.oso.scale.set(2, 2, 2);
-    this.oso.position.set(-90, 55, -40);
-    this.Background.add(this.oso);
-
-    this.casa.scale.set(2, 2, 2);
-    this.casa.position.set(7, 47, -54);
-    this.Background.add(this.casa);
-
-    this.arbol8.scale.set(4, 6, 4);
-    this.arbol8.position.set(-105, 55, -40);
-    this.Background.add(this.arbol8);
-
-    this.muñeco3.scale.set(3, 3.5, 3);
-    this.muñeco3.rotation.y = Math.PI;
-    this.muñeco3.position.set(-14, 48, -37);
-    this.Background.add(this.muñeco3);
-
-    this.pino1.scale.set(6, 6, 6);
-    this.pino1.position.set(68, 24, -25);
-    this.Background.add(this.pino1);     
-    
     this.plano.scale.set(7, 7, 7);
-    this.plano.position.set(0, -50.2, 0);
+    this.plano.position.set(0, -51.5, 0);
     this.Background.add(this.plano);  
 
-    this.pinoVerde.scale.set(2, 2, 2);
-    this.pinoVerde.position.set(-72, 22, -20);
-    this.Background.add(this.pinoVerde);  
-
-    this.pinoVerde1.scale.set(3, 4, 3);
-    this.pinoVerde1.position.set(-16, 48, -48);
-    this.Background.add(this.pinoVerde1);  
-
-    this.pinoVerde2.scale.set(2, 2, 2);
-    this.pinoVerde2.position.set(7, 27, -10);
-    this.Background.add(this.pinoVerde2); 
-    
-    this.pinoVerde3.scale.set(3, 2, 3);
-    this.pinoVerde3.position.set(110, 15, -20);
-    this.Background.add(this.pinoVerde3);  
-
-    this.pinoVerde4.scale.set(2, 2, 2);
-    this.pinoVerde4.position.set(-23, 33, -16);
-    this.Background.add(this.pinoVerde4);  
-
-    this.cartel2.scale.set(9, 8, 9  );
-    this.cartel2.position.set(-90, 30, -4);
-    this.Background.add(this.cartel2);
+    this.Background2 = this.Background.clone();
+    this.scene.add(this.Background2);
 
     this.sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
@@ -242,14 +143,28 @@ Game.onResourcesLoaded = function() {
     this.scene.add(this.sphere);
     this.sphere.visible = this.MESH_VISIBILTY;
 
+    this.sphere2 = new THREE.Mesh(
+        new THREE.SphereGeometry(0.19, 20, 20), this.materials.solid);
+        this.sphere2.position.set(this.player2.object.position.x, this.player2.object.position.y, this.player2.object.position.z);
+        this.sphere2.geometry.computeBoundingSphere();
+        this.scene.add(this.sphere2);
+        this.sphere2.visible = this.MESH_VISIBILTY;
+    
+
     this.player.object.position.set(-15, 12, 20);
     this.player.object.scale.set(0.05, 0.05, 0.05);
     this.player.object.rotation.y = Math.PI / 2;
     this.scene.add(this.player.object);
 
+    this.player2.object.position.set(-15, 12, 20);
+    this.player2.object.scale.set(0.05, 0.05, 0.05);
+    this.player2.object.rotation.y = Math.PI / 2;
+    this.scene.add(this.player2.object);
+
     this.addPlatform();
 
     this.player.cy = this.player.object.position.y;
+    this.player2.cy = this.player2.object.position.y;
 }
 
 Game.init = function() {
@@ -264,22 +179,17 @@ Game.init = function() {
     this.ingresar = document.getElementById("ingresar");
     this.compartir = document.getElementById("compartir");
 
-    this.scene = new THREE.Scene();
-
-    var visibleSize = { width: window.innerWidth, height: window.innerHeight};
-    this.camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 200);
-	this.camera.position.z = 80;
-	this.camera.position.y = 40;
-
+    this.scene = new THREE.Scene();  
     this.clock = new THREE.Clock();	
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setPixelRatio(visibleSize.width / visibleSize.height);
-    this.renderer.setSize(visibleSize.width, visibleSize.height);
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
+    createCamera();
+    createCamera();
 
-    document.body.appendChild(this.renderer.domElement);
+    createRenderer(new THREE.Color(0, 0, 0));
+	createRenderer(new THREE.Color(0, 0, 0));
+
+    $("#scene-section-1").append(renderers[0].domElement);
+	$("#scene-section-2").append(renderers[1].domElement);
 
     document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);		
@@ -307,7 +217,10 @@ Game.loadResources = function() {
     this.Background = new THREE.Group();
     this.scene.add(this.Background);
 
-    let texture_ft = new THREE.TextureLoader().load('assets/Nieve.png');        
+    this.Background2 = new THREE.Group();
+    this.scene.add(this.Background2);
+
+    let texture_ft = new THREE.TextureLoader().load('assets/volcan.jpg');        
     var bgMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(600, 400, 4, 0),
         new THREE.MeshBasicMaterial({
@@ -317,12 +230,27 @@ Game.loadResources = function() {
         })
     );
 
+    let texture_ft2 = new THREE.TextureLoader().load('assets/volcan.jpg');        
+    var bgMesh2 = new THREE.Mesh(
+        new THREE.PlaneGeometry(600, 400, 4, 0),
+        new THREE.MeshBasicMaterial({
+            map: texture_ft2,
+            wireframe: false,
+            side: THREE.DoubleSide
+        })
+    );
+
     bgMesh.receiveShadow = true;
-    bgMesh.position.set(0, 30, -100)
+    bgMesh.position.set(0, 30, -100);
+
+    bgMesh2.receiveShadow = true;
+    bgMesh2.position.set(0, 30, -100);
+
     this.Background.add(bgMesh);
+    this.Background2.add(bgMesh2);
 
     this.sonido = cargarSonido("assets/Audio/moneda.mp3");
-    this.sonidoF = cargarSonido_fondo("../Juego/assets/Audio/fondo.mp3");
+
     //CARGA DE MODELOS 
 
     var moneda = {
@@ -340,175 +268,21 @@ Game.loadResources = function() {
     }
 
     var platform = {
-        path: "assets/Nieve/",
+        path: "assets/Lava/",
         obj: "plataforma_2.obj",
         mtl: "plataforma_2.mtl",
         mesh: null
     }
-
-    var muñeco = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var arbol1 = {
-        path: "assets/Nieve/arbol/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol2 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var arbol3 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
+  
     var mountain = {
-        path: "assets/Nieve/",
-        obj: "mountain.obj",
-        mtl: "mountain.mtl",
-        mesh: null
-    }
-
-    var arbol4 = {
-        path: "assets/Nieve/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol5 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var cartel = {
-        path: "assets/Nieve/",
-        obj: "cartel.obj",
-        mtl: "cartel.mtl",
-        mesh: null
-    }
-
-    var rama = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var nieve = {
-        path: "assets/Nieve/",
-        obj: "nieve.obj",
-        mtl: "nieve.mtl",
-        mesh: null
-    }
-
-    var rama1 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var muñeco1 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var muñeco2 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var nieve1 = {
-        path: "assets/Nieve/",
-        obj: "nieve.obj",
-        mtl: "nieve.mtl",
-        mesh: null
-    }
-
-    var rama2 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var rama3 = {
-        path: "assets/Nieve/",
-        obj: "rama.obj",
-        mtl: "rama.mtl",
-        mesh: null
-    }
-
-    var arbol6 = {
-        path: "assets/Nieve/",
-        obj: "arbol_1.obj",
-        mtl: "arbol_1.mtl",
-        mesh: null
-    }
-
-    var arbol7 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var copo = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo1 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo2 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo3 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
-        mesh: null
-    }
-
-    var copo4 = {
-        path: "assets/Nieve/",
-        obj: "copo.obj",
-        mtl: "copo.mtl",
+        path: "assets/Lava/",
+        obj: "montana.obj",
+        mtl: "montana.mtl",
         mesh: null
     }
 
     var pico = {
-        path: "assets/Nieve/picos/",
+        path: "assets/Lava/",
         obj: "picos.obj",
         mtl: "picos.mtl",
         mesh: null
@@ -521,13 +295,6 @@ Game.loadResources = function() {
         mesh: null
     }
 
-    var señal = {
-        path: "assets/Nieve/",
-        obj: "senal.obj",
-        mtl: "senal.mtl",
-        mesh: null
-    }
-
     var torre = {
         path: "assets/Nieve/",
         obj: "Torre.obj",
@@ -535,97 +302,12 @@ Game.loadResources = function() {
         mesh: null
     }
 
-    var pino = {
-        path: "assets/Nieve/",
-        obj: "pino_2.obj",
-        mtl: "pino_2.mtl",
-        mesh: null
-    }
-
-    var oso = {
-        path: "assets/Nieve/",
-        obj: "oso.obj",
-        mtl: "oso.mtl",
-        mesh: null
-    }
-
-    var casa = {
-        path: "assets/Nieve/",
-        obj: "casa.obj",
-        mtl: "casa.mtl",
-        mesh: null
-    }
-
-    var arbol8 = {
-        path: "assets/Nieve/",
-        obj: "arbol_2.obj",
-        mtl: "arbol_2.mtl",
-        mesh: null
-    }
-
-    var muñeco3 = {
-        path: "assets/Nieve/mono de nieve/",
-        obj: "snowman.obj",
-        mtl: "snowman.mtl",
-        mesh: null
-    }
-
-    var pino1 = {
-        path: "assets/Nieve/",
-        obj: "pino_2.obj",
-        mtl: "pino_2.mtl",
-        mesh: null
-    }
-
     var plano = {
-        path: "assets/Nieve/",
+        path: "assets/Lava/",
         obj: "Plano.obj",
         mtl: "Plano.mtl",
         mesh: null
     }
-
-    var pinoVerde = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde1 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde2 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde3 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var pinoVerde4 = {
-        path: "assets/Nieve/",
-        obj: "pino_3.obj",
-        mtl: "pino_3.mtl",
-        mesh: null
-    }
-
-    var cartel2 = {
-        path: "assets/Nieve/",
-        obj: "cartel.obj",
-        mtl: "cartel.mtl",
-        mesh: null
-    }
-
     var Player = {
         path: "assets/Personajes/",
         obj: "Jugador.fbx",
@@ -644,9 +326,19 @@ Game.loadResources = function() {
         Game.player.object = object[0];
     });
 
+    loadFBX(Player.path, Player.obj, Player.animationRun, (object) => {
+        mixer2 = new THREE.AnimationMixer( object[0] );
+        object[0].animations = object[1].animations;
+
+		const action = mixer2.clipAction( object[0].animations[ 0 ] );
+		action.play();
+
+        Game.player2.object = object[0];
+    });
+
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
         object.scale.set(1, 1, 1);
-        object.scale.set(10, 8, 15);
+        object.scale.set(10, 10, 16);
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -659,7 +351,7 @@ Game.loadResources = function() {
     });
 
     loadOBJWithMTL(platform.path, platform.obj, platform.mtl, (object) => {
-        object.scale.set(10, 3, 15)
+        object.scale.set(10, 4, 16)
         object.rotation.y = Math.PI
         object.traverse(function(node) {
             if (node instanceof THREE.Mesh) {
@@ -671,50 +363,6 @@ Game.loadResources = function() {
         Game.platformFlying = object;
     });
 
-    loadOBJWithMTL(muñeco.path, muñeco.obj, muñeco.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco = object;
-    });
-
-    loadOBJWithMTL(arbol1.path, arbol1.obj, arbol1.mtl, (object) => {
-        object.scale.set(5, 5, 5);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol1 = object;
-    });
-
-    loadOBJWithMTL(arbol2.path, arbol2.obj, arbol2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol2 = object;
-    });
-
-    loadOBJWithMTL(arbol3.path, arbol3.obj, arbol3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol3 = object;
-    });
-
     loadOBJWithMTL(mountain.path, mountain.obj, mountain.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.traverse(function(node) {
@@ -724,6 +372,18 @@ Game.loadResources = function() {
             }
         });
         Game.mountain = object;
+    });
+
+    loadOBJWithMTL(pico.path, pico.obj, pico.mtl, (object) => {
+        object.scale.set(1, 1, 1);
+        object.scale.set(7, 8, 7);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.pico = object;
     });
 
     loadOBJWithMTL(moneda.path, moneda.obj, moneda.mtl, (object) => {
@@ -748,215 +408,6 @@ Game.loadResources = function() {
         Game.pildora = object;
     });
 
-    loadOBJWithMTL(arbol4.path, arbol4.obj, arbol4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol4 = object;
-    });
-
-    loadOBJWithMTL(arbol5.path, arbol5.obj, arbol5.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol5 = object;
-    });
-    
-    loadOBJWithMTL(cartel.path, cartel.obj, cartel.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.cartel = object;
-    });
-    
-    loadOBJWithMTL(rama.path, rama.obj, rama.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama = object;
-    });
-    
-    loadOBJWithMTL(nieve.path, nieve.obj, nieve.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.nieve = object;
-    });
-
-    loadOBJWithMTL(rama1.path, rama1.obj, rama1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama1 = object;
-    });
-
-    loadOBJWithMTL(muñeco1.path, muñeco1.obj, muñeco1.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco1 = object;
-    });
-
-    loadOBJWithMTL(muñeco2.path, muñeco2.obj, muñeco2.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco2 = object;
-    });
-
-    loadOBJWithMTL(nieve1.path, nieve1.obj, nieve1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.nieve1 = object;
-    });
-
-    loadOBJWithMTL(rama2.path, rama2.obj, rama2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama2 = object;
-    });
-
-    loadOBJWithMTL(rama3.path, rama3.obj, rama3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.rama3 = object;
-    });
-
-    loadOBJWithMTL(arbol6.path, arbol6.obj, arbol6.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol6 = object;
-    });
-
-    loadOBJWithMTL(arbol7.path, arbol7.obj, arbol7.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol7 = object;
-    });
-
-    loadOBJWithMTL(copo.path, copo.obj, copo.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo = object;
-    });
-
-    loadOBJWithMTL(copo1.path, copo1.obj, copo1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo1 = object;
-    });
-
-    loadOBJWithMTL(copo2.path, copo2.obj, copo2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo2 = object;
-    });
-
-    loadOBJWithMTL(copo3.path, copo3.obj, copo3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo3 = object;
-    });
-
-    loadOBJWithMTL(copo4.path, copo4.obj, copo4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.copo4 = object;
-    });
-
-    loadOBJWithMTL(pico.path, pico.obj, pico.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.scale.set(7, 8, 7);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pico = object;
-    });
 
     loadOBJWithMTL(roca.path, roca.obj, roca.mtl, (object) => {
         object.scale.set(1, 1, 1);
@@ -968,17 +419,6 @@ Game.loadResources = function() {
             }
         });
         Game.roca = object;
-    });
-
-    loadOBJWithMTL(señal.path, señal.obj, señal.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.señal = object;
     });
 
     loadOBJWithMTL(torre.path, torre.obj, torre.mtl, (object) => {
@@ -993,72 +433,6 @@ Game.loadResources = function() {
         Game.torre = object;
     });
 
-    loadOBJWithMTL(pino.path, pino.obj, pino.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pino = object;
-    });
-
-    loadOBJWithMTL(oso.path, oso.obj, oso.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.oso = object;
-    });
-
-    loadOBJWithMTL(arbol8.path, arbol8.obj, arbol8.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.arbol8 = object;
-    });
-
-    loadOBJWithMTL(casa.path, casa.obj, casa.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.casa = object;
-    });
-
-    loadOBJWithMTL(muñeco3.path, muñeco3.obj, muñeco3.mtl, (object) => {
-        object.scale.set(0.2, 0.2, 0.2);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.muñeco3 = object;
-    });
-
-    loadOBJWithMTL(pino1.path, pino1.obj, pino1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pino1 = object;
-    });
-
     loadOBJWithMTL(plano.path, plano.obj, plano.mtl, (object) => {
         object.scale.set(1, 1, 1);
         object.traverse(function(node) {
@@ -1068,72 +442,6 @@ Game.loadResources = function() {
             }
         });
         Game.plano = object;
-    });
-
-    loadOBJWithMTL(pinoVerde.path, pinoVerde.obj, pinoVerde.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde = object;
-    });
-
-    loadOBJWithMTL(pinoVerde1.path, pinoVerde1.obj, pinoVerde1.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde1 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde2.path, pinoVerde2.obj, pinoVerde2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde2 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde3.path, pinoVerde3.obj, pinoVerde3.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde3 = object;
-    });
-
-    loadOBJWithMTL(pinoVerde4.path, pinoVerde4.obj, pinoVerde4.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.pinoVerde4 = object;
-    });
-
-    loadOBJWithMTL(cartel2.path, cartel2.obj, cartel2.mtl, (object) => {
-        object.scale.set(1, 1, 1);
-        object.traverse(function(node) {
-            if (node instanceof THREE.Mesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-            }
-        });
-        Game.cartel2 = object;
     });
 
     this.platformGroup = new THREE.Group();
@@ -1174,23 +482,23 @@ Game.addPlatform = function() {
                          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
                           63, 64, 65, 66, 67, 67],
-            type: [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-                    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 4, 1]
+            type: [1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 
+                    1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 4, 1]
         },
         {
             count: 20,
-            separation: [-2, -1, 2, 3, 7, 4, 15, 9, 19, 22, 23, 29, 34, 39, 46, 47, 53, 54, 55, 56],
-            type: [0, 0, 0, 0, 5, 6, 3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3]
+            separation: [-2, -1, 2, 3, 7, 15, 17, 19, 22, 23, 26, 29, 34, 39, 46, 47, 53, 54, 55, 56],
+            type: [0, 0, 0, 0, 5, 3, 5, 3, 0, 0, 5, 3, 0, 0, 0, 0, 0, 0, 5, 3]
         },
         {
             count: 17,
             separation: [0, 6, 7, 8, 11, 12, 17, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
-            type: [5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
+            type: [5, 0, 0, 0, 0, 0, 3, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
         },
         {
             count: 4,
-            separation: [12, 26, 43, 62],
-            type: [5, 5, 5, 5]
+            separation: [12, 37, 43, 62],
+            type: [5, 6, 5, 5]
         },
         //pildora 37;
     ];
@@ -1212,12 +520,12 @@ Game.addPlatform = function() {
             //diferentes tipos de plataforma, ahorita solo hay box
             if (platformPieceType[type[i]].type === this.RED_PIECE) {//this.RED_PIECE es lo que hay que modificar para que poner mas tipos
                 platformPiece = this.platformGround.clone();
-                platformPiece.position.set(0, 2, 20);
+                platformPiece.position.set(0, .5, 20);
             }
                 
             if (platformPieceType[type[i]].type === this.GREEN_PIECE){
                 platformPiece = this.platformFlying.clone();
-                platformPiece.position.set(0, 7.5, 20);
+                platformPiece.position.set(0, 6, 20);
             }
 
             if (platformPieceType[type[i]].type === this.PICOS){
@@ -1353,15 +661,6 @@ const cargarSonido = function (fuente) {
     document.body.appendChild(sonido);
     return sonido;
 };
-const cargarSonido_fondo = function (fuente) {
-    const sonidoF = document.createElement("audio");
-    sonidoF.src = fuente;
-    sonidoF.setAttribute("preload", "auto");
-    sonidoF.setAttribute("controls", "none");
-    sonidoF.style.display = "none"; // <-- oculto
-    document.body.appendChild(sonidoF);
-    return sonidoF;
-};
 
 function onKeyDown(event) {
     keys[String.fromCharCode(event.keyCode)] = true;
@@ -1371,16 +670,18 @@ function onKeyUp(event) {
 }
 
 Game.updateKeyboard = function() {
-    if(this.GAME_STARTED){
+    if(this.GAME_STARTED) {
         if (!this.gameOver) {
+        ////////////                           PLAYER 1
         if (keys["A"]) { // left arrow key
             this.player.object.position.x -= this.player.moveSpeed;
-            this.camera.translateX(-this.player.moveSpeed);
+            cameras[0].translateX(-this.player.moveSpeed);
             this.Background.translateX(-this.player.moveSpeed);
         }
+
         if (keys["D"]) { // right arrow key
             this.player.object.position.x += this.player.moveSpeed;
-            this.camera.translateX(this.player.moveSpeed);
+            cameras[0].translateX(this.player.moveSpeed);
             this.Background.translateX(this.player.moveSpeed);
         }
         if (keys["W"]){
@@ -1397,22 +698,51 @@ Game.updateKeyboard = function() {
             Game.player.isJumping = false;
 		}
 
+         ////////////                           PLAYER 2
+         if (keys["J"]) { // left arrow key
+            this.player2.object.position.x -= this.player2.moveSpeed;
+            cameras[1].translateX(-this.player2.moveSpeed);
+            this.Background2.translateX(-this.player2.moveSpeed);
+        }
+
+        if (keys["L"]) { // right arrow key
+            this.player2.object.position.x += this.player2.moveSpeed;
+            cameras[1].translateX(this.player2.moveSpeed);
+            this.Background2.translateX(this.player2.moveSpeed);
+        }
+        if (keys["I"]){
+			if(Game.player2.canJump){
+                
+                Game.player2.vy = 10;
+                Game.player2.canJump = false; 
+                Game.player2.collision = false;  
+                Game.player2.isFalling = true;   
+
+            }
+		}
+        if (!keys["I"]){		
+            Game.player2.isJumping = false;
+		}
+
         if(keys["P"]){
             pauseArea.canvas.style.display = "block"
             this.clock.stop();
             this.gamePause = true;
         }
 		
+        }
+        if(this.gameOver){
+            if (keys[" "]){		
+                Game.restart();
+            }
+        }
+        if(this.gamePause){
+            if(keys["P"]){
+                
+            }
+        }
     }
-    if(this.gameOver){
-        if (keys[" "]){		
-            Game.restart();
-		}
-    }
-    if(this.gamePause){
-       
-    }
-    }
+
     
 }
 
@@ -1420,8 +750,15 @@ Game.restart = function () {
   
     this.player.object.position.set(-15, 12, 20);
     this.player.monedas = 0;
-    this.camera.position.x = 0;
+    this.player.cy = 12;
+    cameras[0].position.x = 0;
     this.Background.position.x = 0;
+
+    this.player2.object.position.set(-15, 12, 20);
+    this.player2.cy = 12;
+    this.player2.monedas = 0;
+    cameras[1].position.x = 0;
+    this.Background2.position.x = 0;
 
     this.clock = new THREE.Clock();	
     this.again.style.display = "none";
@@ -1542,6 +879,99 @@ Game.findCollision = function() {
     return false;
 }
 
+Game.findCollision2 = function() {
+
+    var ind = Math.abs(Math.round(this.player2.cy));
+
+    if (this.colliderArr[ind]) {
+        for (var i = 0; i < this.colliderArr[ind].length; i++) {
+            if(this.colliderArr[ind][i].active == true){
+                this.player2.object.children[0].children[0].geometry.computeBoundingBox(); 
+                this.colliderArr[ind][i].geometry.computeBoundingBox();
+                this.player2.object.updateMatrixWorld();
+                this.colliderArr[ind][i].updateMatrixWorld();
+    
+                var box1 = this.player2.object.children[0].children[0].geometry.boundingBox.clone();
+                box1.applyMatrix4(this.player2.object.matrixWorld);
+    
+                var box2 = this.colliderArr[ind][i].geometry.boundingBox.clone();
+                box2.applyMatrix4(this.colliderArr[ind][i].matrixWorld);
+                if (box1.intersectsBox(box2)) {
+                    if (this.colliderArr[ind][i].platformType === this.PICOS){
+                        if(!this.player2.invensible){
+                            this.gameOver = true;
+                        this.clock.stop();
+                        Game.timer.innerHTML = "GAME OVER";
+                        Game.again.style.display = "block"
+                        }                        
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.MONEDA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player2.monedas++;
+                        this.sonido.play();
+                        return false;
+
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.PILDORA){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.player2.invensible = true;
+                        this.contadorInvensibilidad.style.display = "block"
+                        this.player2.fin = Game.clock.getElapsedTime() + 5;
+                        return false;
+
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.TORRE){
+                        
+                        this.gameOver = true;
+
+                        var num = Game.clock.getElapsedTime();                       
+                        var minutos = Math.floor(num / 60);  
+                        var segundos = Math.round(num % 60);
+
+                        var string = "";
+
+                        if(minutos < 10){
+                            if(segundos < 10){
+                                Game.again.innerHTML = "Your time: 0" + minutos + ":0" + segundos;
+                                string = "0" + minutos + ":0" + segundos;
+                            }
+                            else{
+                                Game.again.innerHTML = "Your time: 0" + minutos + ":" + segundos;
+                                string = "0" + minutos + ":" + segundos;
+                            }
+                        }
+                        else{
+                            if(segundos < 10){
+                                Game.again.innerHTML = "Your time: " + minutos + ":0" + segundos;
+                                string = minutos + ":0" + segundos;
+                            }
+                            else{
+                                Game.again.innerHTML = "Your time: " + minutos + ":" + segundos;
+                                string = minutos + ":" + segundos;
+                            }
+                        }    
+                        
+                        savePuntos(this.player.nombre, string, num, this.player2.monedas)
+
+                        this.clock.stop();
+                        Game.timer.innerHTML = "YOU WIN";
+                        Game.again.style.display = "block"
+                        return false;
+
+                    }
+                    return true;
+                }
+            }        
+        }
+    }
+
+    return false;
+}
+
 Game.resetGravity = function  () {
     this.dt = 0.1; //delta time to make smooth movement
     this.mvy = 10;  //max velocity
@@ -1577,12 +1007,24 @@ function update() {
     requestAnimationFrame(update);
 
     Game.updateKeyboard();
-    Game.renderer.render(Game.scene, Game.camera);
+
+    for (var i = 0; i < renderers.length; i++) {
+        if(i == 0){
+            Game.Background2.visible = false;
+            Game.Background.visible = true;
+        }
+        if(i == 1){
+            Game.Background2.visible = true;
+            Game.Background.visible = false;
+        }
+        renderers[i].render(Game.scene, cameras[i]);
+    }
 
     if (Game.GAME_STARTED) {
      
         deltaTime = Game.clock.getDelta();
         if ( mixer ) mixer.update( deltaTime );      
+        if ( mixer2 ) mixer2.update( deltaTime );      
 
         if (!Game.gameOver) {   
 
@@ -1632,6 +1074,29 @@ function update() {
             Game.sphere.position.set(Game.player.object.position.x, 
             Game.player.object.position.y, Game.player.object.position.z);
             Game.player.collision = Game.findCollision();
+
+            if (Game.player2.collision) { 
+                Game.player2.vy = 0;
+                Game.player2.canJump = true;
+                Game.player2.isFalling = false;
+            }        
+            else{
+                Game.player2.isFalling = true;
+            }    
+
+            if(Game.player2.isFalling) {       
+              
+                Game.player2.canJump = false;
+                if(Game.player2.vy <= Game.mvy && Game.player2.vy >= -Game.mvy)
+                    Game.player2.vy -= Game.gravity;      
+                               
+                Game.player2.cy += Game.player2.vy * Game.dt;
+                Game.player2.object.position.y = Game.player2.cy; 
+            }                                                                                                                     
+
+            Game.sphere.position.set(Game.player2.object.position.x, 
+            Game.player2.object.position.y, Game.player2.object.position.z);
+            Game.player2.collision = Game.findCollision2();
         }
         if(Game.gameOver){
             document.getElementById("compartir").onclick = function() { 
@@ -1644,7 +1109,6 @@ function update() {
             Game.player.nombre = document.getElementById("textBox").value;
             Game.nombre.style.display = "none"
             Game.GAME_STARTED = true;
-            Game.sonidoF.play();
         };  
     }
 }
@@ -1683,6 +1147,7 @@ function pause() {
     btnPlay = new component(80, 80, "assets/Pausa/btnplay.png", 700, 450, "btnc");
     const colPlay = new Path2D();
     colPlay.rect(700, 450, 80, 80);
+
 
     pauseArea.start();
     pauseArea.canvas.addEventListener('mousemove', function(event) {
@@ -1733,10 +1198,6 @@ function pause() {
        if (pauseArea.context.isPointInPath(colSalir, event.offsetX, event.offsetY)) {
             location.href = "../Menu/index.html";
        }   
-       //btnMusica
-       if (pauseArea.context.isPointInPath(colMusic, event.offsetX, event.offsetY)) {
-        Game.sonidoF.pause();
-       }
    });     
 }
 
@@ -1834,32 +1295,4 @@ function updateGameArea() {
     btnPause.update();
     btnPlay.newPos();
     btnPlay.update();
-}
-
-function savePuntos(nombre, string, tiempo, monedas) {
-
-    var dataToSend = {
-        action: "Agregar1",
-        nombre: nombre,
-        string: string,
-        tiempo: tiempo,
-        monedas: monedas
-    };
-
-    var objetoEnJSON = JSON.stringify(dataToSend);
-    var objetoDesdeJSON = JSON.parse(objetoEnJSON);
-
-    $.ajax({
-        url: "webservice/webservice.php",
-        async: true,
-        type: 'POST',
-        data: dataToSend,
-        success: function (data) {
-            alert(data);
-        },
-        error: function (x, y, z) {
-            alert("Error en webservice: " + x + y + z);
-        }
-        //..
-    });
 }

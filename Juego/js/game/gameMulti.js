@@ -1506,6 +1506,12 @@ Game.updateKeyboard = function() {
         if (!keys["I"]){		
             Game.player2.isJumping = false;
 		}
+        
+        if(keys["P"]){
+            pauseArea.canvas.style.display = "block"
+            this.clock.stop();
+            this.gamePause = true;
+        }
 		
         }
         if(this.gameOver){
@@ -1886,7 +1892,7 @@ function pause() {
        }
        //btnSalir
        if (pauseArea.context.isPointInPath(colSalir, event.offsetX, event.offsetY)) {
-           
+            location.href = "../Menu/index.html";
        }   
    });     
 }
