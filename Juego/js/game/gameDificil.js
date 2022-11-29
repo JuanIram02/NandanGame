@@ -262,6 +262,7 @@ Game.init = function() {
     this.contadorInvensibilidad = document.getElementById("invensible");
     this.nombre = document.getElementById("nombre");
     this.ingresar = document.getElementById("ingresar");
+    this.compartir = document.getElementById("compartir");
 
     this.scene = new THREE.Scene();
 
@@ -1614,6 +1615,11 @@ function update() {
             Game.player.object.position.y, Game.player.object.position.z);
             Game.player.collision = Game.findCollision();
         }
+        if(Game.gameOver){
+            document.getElementById("compartir").onclick = function() { 
+                shareScore(Game.player.monedas)
+            };  
+        }
     }
     else{
         document.getElementById("ingresar").onclick = function() { 
@@ -1706,7 +1712,7 @@ function pause() {
        }
        //btnSalir
        if (pauseArea.context.isPointInPath(colSalir, event.offsetX, event.offsetY)) {
-           
+            location.href = "../Menu/index.html";
        }   
    });     
 }

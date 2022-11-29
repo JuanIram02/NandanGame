@@ -1578,10 +1578,6 @@ function update() {
 
         if (!Game.gameOver) {   
 
-            document.getElementById("compartir").onclick = function() { 
-                shareScore(Game.player.monedas)
-            }; 
-
             timer();
 
             Game.monedas.innerHTML = "Monedas " + Game.player.monedas + " / 10";
@@ -1717,7 +1713,7 @@ function pause() {
        }
        //btnSalir
        if (pauseArea.context.isPointInPath(colSalir, event.offsetX, event.offsetY)) {
-           
+            location.href = "../Menu/index.html";
        }   
    });     
 }
@@ -1844,8 +1840,4 @@ function savePuntos(nombre, string, tiempo, monedas) {
         }
         //..
     });
-}
-
-function shareFB(){
-    shareScore(Game.player.moedas)
 }
