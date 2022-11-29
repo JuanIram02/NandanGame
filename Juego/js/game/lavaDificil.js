@@ -398,6 +398,7 @@ Game.addPlatform = function() {
         { type: this.PICOS },
         { type: this.ROCAS },
         { type: this.TORRE },
+        { type: this.MONEDA },
         { type: this.PILDORA },
         { type: this.FLASH }
 
@@ -429,14 +430,14 @@ Game.addPlatform = function() {
         },
         {
             count: 18,
-            separation: [0, 6, 7, 8, 11, 12, 17, 18, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
-            type: [5, 0, 0, 0, 0, 0, 5, 7, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
+            separation: [0, 6, 7, 8, 9, 11, 12, 17, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
+            type: [5, 0, 0, 0, 7, 0, 0, 5, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
         },
         {
             count: 4,
             separation: [12, 26, 43, 62],
             type: [5, 5, 5, 5]
-        }, 
+        },
         //pildora 37;
     ];
     
