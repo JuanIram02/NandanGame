@@ -393,6 +393,7 @@ Game.loadResources = function() {
     this.Background2.add(bgMesh2);
 
     this.sonido = cargarSonido("assets/Audio/moneda.mp3");
+    this.sonidoF = cargarSonido_fondo("../Juego/assets/Audio/fondo.mp3");
 
     //CARGA DE MODELOS 
 
@@ -1434,6 +1435,15 @@ const cargarSonido = function (fuente) {
     document.body.appendChild(sonido);
     return sonido;
 };
+const cargarSonido_fondo = function (fuente) {
+    const sonidoF = document.createElement("audio");
+    sonidoF.src = fuente;
+    sonidoF.setAttribute("preload", "auto");
+    sonidoF.setAttribute("controls", "none");
+    sonidoF.style.display = "none"; // <-- oculto
+    document.body.appendChild(sonidoF);
+    return sonidoF;
+};
 
 function onKeyDown(event) {
     keys[String.fromCharCode(event.keyCode)] = true;
@@ -1962,6 +1972,7 @@ function component(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
+    
     pauseArea.clear();
     fondo.newPos();
     fondo.update();

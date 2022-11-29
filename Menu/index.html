@@ -18,7 +18,21 @@ var btnSalir;
 var myBackground;
 var myTitulo;
 
+const cargarSonido_fondo = function (fuente) {
+    const sonidoF = document.createElement("audio");
+    sonidoF.src = fuente;
+    sonidoF.setAttribute("preload", "auto");
+    sonidoF.setAttribute("controls", "none");
+    sonidoF.style.display = "none"; // <-- oculto
+    document.body.appendChild(sonidoF);
+    return sonidoF;
+};
+
+
 function startGame() {
+    var sonidoF = cargarSonido_fondo("../Juego/assets/Audio/fondo.mp3");
+    sonidoF.play();
+
     btnJugar = new component(308, 210, "assets/btnjugar.png", 520, 210, "btn");    
     const colJugar = new Path2D();
     colJugar.rect(520, 250, 308, 110); 
@@ -115,6 +129,8 @@ function component(width, height, color, x, y, type) {
         }
     }*/    
     this.update = function() {
+
+
         ctx = myGameArea.context;
         if (type == "image" || type == "background" || type == "btn") {
             ctx.drawImage(this.image, 
@@ -159,6 +175,7 @@ function component(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
+
     myGameArea.clear();
     myBackground.speedX = -1;
     myBackground.newPos();    
