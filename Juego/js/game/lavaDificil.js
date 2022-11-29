@@ -31,6 +31,7 @@ Game.ROCA = 13;
 Game.TORRE = 14;
 Game.MONEDA = 15;
 Game.PILDORA = 16;
+Game.FLASH = 17;
 
 Game.gameOver = false;
 Game.gamePause = false;
@@ -190,7 +191,12 @@ Game.loadResources = function() {
         mtl: "moneda.mtl",
         mesh: null
     }
-
+    var  flash= {
+        path: "assets/Items/Rayo/",
+        obj: "rayo.obj",
+        mtl: "rayo.mtl",
+        mesh: null
+    }
     var pildora = {
         path: "assets/Items/Pildora/",
         obj: "pildora.obj",
@@ -327,6 +333,18 @@ Game.loadResources = function() {
         Game.pildora = object;
     });
 
+    
+    loadOBJWithMTL(flash.path, flash.obj, flash.mtl, (object) => {
+        object.scale.set(3, 3, 3);
+        object.traverse(function(node) {
+            if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        Game.flash = object;
+    });
+
 
     loadOBJWithMTL(roca.path, roca.obj, roca.mtl, (object) => {
         object.scale.set(1, 1, 1);
@@ -380,8 +398,8 @@ Game.addPlatform = function() {
         { type: this.PICOS },
         { type: this.ROCAS },
         { type: this.TORRE },
-        { type: this.MONEDA },
-        { type: this.PILDORA }
+        { type: this.PILDORA },
+        { type: this.FLASH }
 
     ];
 
@@ -410,9 +428,9 @@ Game.addPlatform = function() {
             type: [0, 0, 0, 0, 5, 6, 3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3]
         },
         {
-            count: 17,
-            separation: [0, 6, 7, 8, 11, 12, 17, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
-            type: [5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
+            count: 18,
+            separation: [0, 6, 7, 8, 11, 12, 17, 18, 26, 32, 36, 37, 41, 44, 49, 50, 51, 58],
+            type: [5, 0, 0, 0, 0, 0, 5, 7, 0, 5, 0, 0, 3, 3, 5, 3, 3, 0]
         },
         {
             count: 4,
@@ -472,6 +490,11 @@ Game.addPlatform = function() {
                 platformPiece.position.set(0, 12, 20);
             }
 
+            if (platformPieceType[type[i]].type === this.FLASH){
+                platformPiece = this.flash.clone();
+                platformPiece.position.set(0, 12, 20);
+            }
+
 
             collider = [];
 
@@ -496,6 +519,16 @@ Game.addPlatform = function() {
             collider[0].platformType = platformPieceType[type[i]].type;
             }
             if (platformPieceType[type[i]].type === this.PILDORA){
+                collider.push(new THREE.Mesh(new THREE.BoxGeometry(9, 10, 5),
+             this.materials.solid));
+            collider[0].active = true;
+            collider[0].position.set(0, 10, 20);
+            collider[0].rotation.x += Math.PI / 2;
+            collider[0].receiveShadow = true;
+            collider[0].visible = this.MESH_VISIBILTY;
+            collider[0].platformType = platformPieceType[type[i]].type;
+            }
+            if (platformPieceType[type[i]].type === this.FLASH){
                 collider.push(new THREE.Mesh(new THREE.BoxGeometry(9, 10, 5),
              this.materials.solid));
             collider[0].active = true;
@@ -667,6 +700,12 @@ Game.restart = function () {
                     this.platformArr[y][i].visible = true;
 
                 }
+                if (this.colliderArr[y][i].platformType === this.FLASH){
+                    
+                    this.colliderArr[y][i].active = true;
+                    this.platformArr[y][i].visible = true;
+
+                }
             }
         }
     }
@@ -717,6 +756,16 @@ Game.findCollision = function() {
                         this.player.invensible = true;
                         this.contadorInvensibilidad.style.display = "block"
                         this.player.fin = Game.clock.getElapsedTime() + 5;
+                        return false;
+
+                    }
+                    if (this.colliderArr[ind][i].platformType === this.FLASH){
+                        
+                        this.colliderArr[ind][i].active = false;
+                        this.platformArr[ind][i].visible = false;
+                        this.contadorInvensibilidad.style.display = "block"
+                        this.player.fin = Game.clock.getElapsedTime() + 3;
+                        this.player.moveSpeed = 1.5; 
                         return false;
 
                     }
@@ -821,6 +870,14 @@ function update() {
                 Game.contadorInvensibilidad.innerHTML = "Invulnerabilidad " + segundos + " segundos";
                 if(segundos <= 0){
                     Game.player.invensible = false;
+                    Game.contadorInvensibilidad.style.display = "none";
+                }
+            }
+            if(Game.player.moveSpeed != 1){               
+                var segundos = Math.round(Game.player.fin - Game.clock.getElapsedTime());
+                Game.contadorInvensibilidad.innerHTML = "Super velocidad " + segundos + " segundos";
+                if(segundos <= 0){
+                    Game.player.moveSpeed = 1;
                     Game.contadorInvensibilidad.style.display = "none";
                 }
             }
