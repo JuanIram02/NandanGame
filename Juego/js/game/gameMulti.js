@@ -117,7 +117,6 @@ Game.addLoader = function() {
         console.log("loaded all resources");
         !Game.GAME_LOADED && document.body.removeChild(progress);
         Game.GAME_LOADED = true;
-        Game.GAME_STARTED = true;
         Game.onResourcesLoaded();
     };
 }
@@ -319,6 +318,9 @@ Game.init = function() {
     this.again = document.getElementById("again");
     this.monedas = document.getElementById("monedas");
     this.contadorInvensibilidad = document.getElementById("invensible");
+    this.nombre = document.getElementById("nombre");
+    this.ingresar = document.getElementById("ingresar");
+    this.compartir = document.getElementById("compartir");
 
     this.scene = new THREE.Scene();  
     this.clock = new THREE.Clock();	
@@ -358,6 +360,9 @@ Game.loadResources = function() {
     this.Background = new THREE.Group();
     this.scene.add(this.Background);
 
+    this.Background2 = new THREE.Group();
+    this.scene.add(this.Background2);
+
     let texture_ft = new THREE.TextureLoader().load('assets/Nieve.png');        
     var bgMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(600, 400, 4, 0),
@@ -368,10 +373,24 @@ Game.loadResources = function() {
         })
     );
 
+    let texture_ft2 = new THREE.TextureLoader().load('assets/Nieve.png');        
+    var bgMesh2 = new THREE.Mesh(
+        new THREE.PlaneGeometry(600, 400, 4, 0),
+        new THREE.MeshBasicMaterial({
+            map: texture_ft2,
+            wireframe: false,
+            side: THREE.DoubleSide
+        })
+    );
+
     bgMesh.receiveShadow = true;
-    bgMesh.position.set(0, 30, -100)
+    bgMesh.position.set(0, 30, -100);
+
+    bgMesh2.receiveShadow = true;
+    bgMesh2.position.set(0, 30, -100);
+
     this.Background.add(bgMesh);
-    this.Background2 = this.Background.clone();
+    this.Background2.add(bgMesh2);
 
     this.sonido = cargarSonido("assets/Audio/moneda.mp3");
 
@@ -1424,7 +1443,8 @@ function onKeyUp(event) {
 }
 
 Game.updateKeyboard = function() {
-    if (!this.gameOver) {
+    if(this.GAME_STARTED) {
+        if (!this.gameOver) {
         ////////////                           PLAYER 1
         if (keys["A"]) { // left arrow key
             this.player.object.position.x -= this.player.moveSpeed;
@@ -1477,19 +1497,20 @@ Game.updateKeyboard = function() {
             Game.player2.isJumping = false;
 		}
 		
-    }
-    if(this.gameOver){
-        if (keys[" "]){		
-            Game.restart();
-		}
-    }
-    if(this.gamePause){
-        if(keys["P"]){
-            pauseArea.canvas.style.display = "block"
-            this.clock.stop();
-            this.gamePause = true;
+        }
+        if(this.gameOver){
+            if (keys[" "]){		
+                Game.restart();
+            }
+        }
+        if(this.gamePause){
+            if(keys["P"]){
+                
+            }
         }
     }
+
+    
 }
 
 Game.restart = function () {
@@ -1757,6 +1778,18 @@ function update() {
             Game.player2.object.position.y, Game.player2.object.position.z);
             Game.player2.collision = Game.findCollision2();
         }
+        if(Game.gameOver){
+            document.getElementById("compartir").onclick = function() { 
+                shareScore(Game.player.monedas)
+            };  
+        }
+    }
+    else{
+        document.getElementById("ingresar").onclick = function() { 
+            Game.player.nombre = document.getElementById("textBox").value;
+            Game.nombre.style.display = "none"
+            Game.GAME_STARTED = true;
+        };  
     }
 }
 

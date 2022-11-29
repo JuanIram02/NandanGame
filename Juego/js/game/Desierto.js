@@ -78,7 +78,6 @@ Game.addLoader = function() {
         console.log("loaded all resources");
         !Game.GAME_LOADED && document.body.removeChild(progress);
         Game.GAME_LOADED = true;
-        Game.GAME_STARTED = true;
         Game.onResourcesLoaded();
     };
 }
