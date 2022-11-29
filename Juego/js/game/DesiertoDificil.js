@@ -212,7 +212,7 @@ Game.loadResources = function() {
     this.Background.add(bgMesh);
 
     this.sonido = cargarSonido("assets/Audio/moneda.mp3");
-
+    this.sonidoF = cargarSonido_fondo("../Juego/assets/Audio/fondo.mp3");
     //CARGA DE MODELOS 
     var moneda = {
         path: "assets/Items/Moneda/",
@@ -733,6 +733,15 @@ const cargarSonido = function (fuente) {
     document.body.appendChild(sonido);
     return sonido;
 };
+const cargarSonido_fondo = function (fuente) {
+    const sonidoF = document.createElement("audio");
+    sonidoF.src = fuente;
+    sonidoF.setAttribute("preload", "auto");
+    sonidoF.setAttribute("controls", "none");
+    sonidoF.style.display = "none"; // <-- oculto
+    document.body.appendChild(sonidoF);
+    return sonidoF;
+};
 
 function onKeyDown(event) {
     keys[String.fromCharCode(event.keyCode)] = true;
@@ -1006,6 +1015,7 @@ function update() {
             Game.player.nombre = document.getElementById("textBox").value;
             Game.nombre.style.display = "none"
             Game.GAME_STARTED = true;
+            Game.sonidoF.play();
         };  
 }
 }
@@ -1094,6 +1104,10 @@ function pause() {
        if (pauseArea.context.isPointInPath(colSalir, event.offsetX, event.offsetY)) {
         location.href = "../Menu/index.html";
        }   
+       //btnMusica
+       if (pauseArea.context.isPointInPath(colMusic, event.offsetX, event.offsetY)) {
+        Game.sonidoF.pause();
+       }
    });     
 }
 
