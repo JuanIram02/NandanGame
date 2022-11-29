@@ -4,16 +4,33 @@
 <head>
     <title>NandasDemo</title>
     <script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../facebook/mifacebook.js"></script>
 	<!-- <script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script> -->
 </head>
 <style>
+    #compartir{
+        position: absolute;
+        top: 140px;
+        left: 1200px;       
+        display: none;
+    }
     #pausa {
         position: absolute;
         top: 120px;
         left: 300px;       
         display: none;
+    }
+    #nombre {
+        position: absolute;
+        width: 300px;
+        height: 190px;
+        top: 300px;
+        left: 800px;       
+        border: 10px;
+        display: block;
+        background-color: burlywood;
     }
     #loader {
         width: 200px;
@@ -80,6 +97,12 @@
     <p id="again">Press SPACE to play again</p>
     <p id="monedas">Monedas 0 / 10</p>
     <p id="invensible">Invulnerabilidad 5 segundos</p>
+    <div id="nombre">
+        <p style="font-size: xx-large">Ingrese su nombre:</p>
+        <input id="textBox" type="text">
+        <p><input id="ingresar" type="button" value="Ingresar"></p>
+    </div>
+    <button id="compartir">Compartir en Facebook</button>
     <script src="js\game\multi.js" type="module"></script>
     <div style="display: flex; height: 100px;">
 		<div style="width: 50%;" id="scene-section-1"></div>
