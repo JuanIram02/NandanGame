@@ -1599,15 +1599,6 @@ function update() {
                 }
             }
 
-            if(Game.player2.invensible){               
-                var segundos = Math.round(Game.player.fin - Game.clock.getElapsedTime());
-                Game.contadorInvensibilidad.innerHTML = "Invulnerabilidad " + segundos + " segundos";
-                if(segundos <= 0){
-                    Game.player2.invensible = false;
-                    Game.contadorInvensibilidad.style.display = "none";
-                }
-            }
-
             Game.moneda.rotation.y += 2 * deltaTime;
 
             if (Game.player.collision) { 
