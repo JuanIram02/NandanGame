@@ -262,6 +262,7 @@ Game.init = function() {
     this.contadorInvensibilidad = document.getElementById("invensible");
     this.nombre = document.getElementById("nombre");
     this.ingresar = document.getElementById("ingresar");
+    this.compartir = document.getElementById("compartir");
 
     this.scene = new THREE.Scene();
 
@@ -1496,21 +1497,21 @@ Game.findCollision = function() {
 
                         if(minutos < 10){
                             if(segundos < 10){
-                                Game.again.innerHTML = "Your time: 0" + minutos + ":0" + segundos;
+                                Game.again.innerHTML = "&nbsp&nbsp;&nbsp&nbsp;Your time: 0" + minutos + ":0" + segundos;
                                 string = "0" + minutos + ":0" + segundos;
                             }
                             else{
-                                Game.again.innerHTML = "Your time: 0" + minutos + ":" + segundos;
+                                Game.again.innerHTML = "&nbsp&nbsp;&nbsp&nbsp;Your time: 0" + minutos + ":" + segundos;
                                 string = "0" + minutos + ":" + segundos;
                             }
                         }
                         else{
                             if(segundos < 10){
-                                Game.again.innerHTML = "Your time: " + minutos + ":0" + segundos;
+                                Game.again.innerHTML = "&nbsp&nbsp;&nbsp&nbsp;Your time: " + minutos + ":0" + segundos;
                                 string = minutos + ":0" + segundos;
                             }
                             else{
-                                Game.again.innerHTML = "Your time: " + minutos + ":" + segundos;
+                                Game.again.innerHTML = "&nbsp&nbsp;&nbsp&nbsp;Your time: " + minutos + ":" + segundos;
                                 string = minutos + ":" + segundos;
                             }
                         }    
@@ -1520,6 +1521,7 @@ Game.findCollision = function() {
                         this.clock.stop();
                         Game.timer.innerHTML = "YOU WIN";
                         Game.again.style.display = "block"
+                        Game.compartir.style.display = "block"
                         return false;
 
                     }
@@ -1576,6 +1578,10 @@ function update() {
 
         if (!Game.gameOver) {   
 
+            document.getElementById("compartir").onclick = function() { 
+                shareScore(Game.player.monedas)
+            }; 
+
             timer();
 
             Game.monedas.innerHTML = "Monedas " + Game.player.monedas + " / 10";
@@ -1613,6 +1619,11 @@ function update() {
             Game.sphere.position.set(Game.player.object.position.x, 
             Game.player.object.position.y, Game.player.object.position.z);
             Game.player.collision = Game.findCollision();
+        }
+        if(Game.gameOver){
+            document.getElementById("compartir").onclick = function() { 
+                shareScore(Game.player.monedas)
+            };  
         }
     }
     else{
@@ -1833,4 +1844,8 @@ function savePuntos(nombre, string, tiempo, monedas) {
         }
         //..
     });
+}
+
+function shareFB(){
+    shareScore(Game.player.moedas)
 }

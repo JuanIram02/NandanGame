@@ -4,11 +4,18 @@
 <head>
     <title>NandasDemo</title>
     <script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../facebook/mifacebook.js"></script>
 	<!-- <script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script> -->
 </head>
 <style>
+    #compartir{
+        position: absolute;
+        top: 140px;
+        left: 1200px;       
+        display: block;
+    }
     #pausa {
         position: absolute;
         top: 120px;
@@ -95,8 +102,9 @@
         <input id="textBox" type="text">
         <p><input id="ingresar" type="button" value="Ingresar"></p>
     </div>
+    <button id="compartir">Compartir en Facebook</button>
+    <script src="js\game\game.js" type="module"></script>
     
-    <script src="js\game\lavaDificil.js" type="module"></script>
 </body>
 
 </html>
