@@ -145,6 +145,7 @@ function startGame() {
    myGameArea.canvas.addEventListener('click', function(event) {
        //btnJugar
        if (myGameArea.context.isPointInPath(colJugar, event.offsetX, event.offsetY)) {
+        if(myGameArea.modo == 1){
             if(myGameArea.nivel == 2){
                 if(myGameArea.dificultad == 1){
                     location.href = "../Juego/game.html";
@@ -169,6 +170,34 @@ function startGame() {
                     location.href = "../Juego/lavaDificil.html";
                 }
             }
+        }
+        if(myGameArea.modo == 2){
+            if(myGameArea.nivel == 2){
+                if(myGameArea.dificultad == 1){
+                    location.href = "../Juego/gameMulti.html";
+                }
+                if(myGameArea.dificultad == 2){
+                    location.href = "../Juego/gameDificilMulti.html";
+                }
+            }
+            if(myGameArea.nivel == 1){
+                if(myGameArea.dificultad == 1){
+                    location.href = "../Juego/DesiertoMulti.html";
+                }
+                if(myGameArea.dificultad == 2){
+                    location.href = "../Juego/DesiertoDificilMulti.html";
+                }
+            }
+            if(myGameArea.nivel == 3){
+                if(myGameArea.dificultad == 1){
+                    location.href = "../Juego/lavaMulti.html";
+                }
+                if(myGameArea.dificultad == 2){
+                    location.href = "../Juego/lavaDificilMulti.html";
+                }
+            }
+        }
+            
         }
        //btnRegresar
        if (myGameArea.context.isPointInPath(colRegresar, event.offsetX, event.offsetY)) {
